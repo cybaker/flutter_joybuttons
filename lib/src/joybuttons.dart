@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'joybuttons_base.dart';
 import 'joybuttons_controller.dart';
-import 'joybuttons_stick.dart';
 import 'joybuttons_stick_offset_calculator.dart';
 
 /// JoyButtons widget
@@ -12,20 +11,17 @@ class JoyButtons extends StatefulWidget {
   /// Callback, which is called with [period] frequency when the stick is dragged.
   final TouchDragCallback listener;
 
+  /// Callback, which is called with [period] frequency when the stick is dragged.
+  final List<Widget> buttonWidgets;
+
   /// Frequency of calling [listener] from the moment the stick is dragged, by default 100 milliseconds.
   final Duration period;
 
   /// Widget that renders joyButtons base, by default [JoyButtonsBase].
   final Widget? base;
 
-  /// Widget that renders joyButtons stick, it places in the center of [base] widget, by default [JoyButtonsStick].
-  final Widget stick;
-
   /// Controller allows to control joyButtons events outside the widget.
   final JoyButtonsController? controller;
-
-  /// Possible directions mode of the joyButtons stick, by default [JoyButtonsMode.all]
-  final JoyButtonsMode mode;
 
   /// Calculate offset of the stick based on the stick drag start position and the current stick position.
   final ButtonsOffsetCalculator stickOffsetCalculator;
@@ -39,10 +35,9 @@ class JoyButtons extends StatefulWidget {
   const JoyButtons({
     Key? key,
     required this.listener,
+    required this.buttonWidgets,
     this.period = const Duration(milliseconds: 100),
     this.base,
-    this.stick = const JoybuttonsStick(),
-    this.mode = JoyButtonsMode.all,
     this.stickOffsetCalculator = const CircleStickOffsetCalculator(),
     this.controller,
     this.onStickDragStart,
@@ -77,13 +72,13 @@ class _JoyButtonsState extends State<JoyButtons> {
       children: [
         Container(
           key: _baseKey,
-          child: widget.base ?? JoyButtonsBase(mode: widget.mode),
+          child: widget.base ?? JoyButtonsBase(),
         ),
         GestureDetector(
           onPanStart: (details) => _stickDragStart(details.globalPosition),
           onPanUpdate: (details) => _stickDragUpdate(details.globalPosition),
           onPanEnd: (details) => _stickDragEnd(),
-          child: widget.stick,
+          child: Text("Center"),
         ),
       ],
     );
@@ -100,7 +95,6 @@ class _JoyButtonsState extends State<JoyButtons> {
         _baseKey.currentContext!.findRenderObject()! as RenderBox;
 
     final stickOffset = widget.stickOffsetCalculator.calculate(
-      mode: widget.mode,
       startDragStickPosition: _startDragStickPosition,
       currentDragStickPosition: globalPosition,
       baseSize: baseRenderBox.size,

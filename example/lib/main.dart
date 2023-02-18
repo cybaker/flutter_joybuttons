@@ -68,15 +68,8 @@ class JoyButtonsExample extends StatefulWidget {
 }
 
 class _JoyButtonsExampleState extends State<JoyButtonsExample> {
-  double _x = 100;
-  double _y = 100;
-  final JoyButtonsMode _joyButtonsMode = JoyButtonsMode.all;
-
-  @override
-  void didChangeDependencies() {
-    _x = MediaQuery.of(context).size.width / 2 - ballSize / 2;
-    super.didChangeDependencies();
-  }
+  var _joyButtonsNum = 2;
+  var _buttonNameList = <String>[];
 
   @override
   Widget build(BuildContext context) {
@@ -87,17 +80,14 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
       body: SafeArea(
         child: Stack(
           children: [
-            Ball(_x, _y),
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
-                mode: _joyButtonsMode,
                 listener: (details) {
                   setState(() {
-                    _x = _x + step * details.x;
-                    _y = _y + step * details.y;
                   });
                 },
+                buttonWidgets: [],
               ),
             ),
           ],

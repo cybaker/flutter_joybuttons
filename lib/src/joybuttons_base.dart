@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'joybuttons.dart';
 
 class JoyButtonsBase extends StatelessWidget {
-  final JoyButtonsMode mode;
 
   const JoyButtonsBase({
-    this.mode = JoyButtonsMode.all,
     Key? key,
   }) : super(key: key);
 
@@ -20,16 +18,13 @@ class JoyButtonsBase extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: CustomPaint(
-        painter: _JoyButtonsBasePainter(mode),
+        painter: _JoyButtonsBasePainter(),
       ),
     );
   }
 }
 
 class _JoyButtonsBasePainter extends CustomPainter {
-  _JoyButtonsBasePainter(this.mode);
-
-  final JoyButtonsMode mode;
 
   final _borderPaint = Paint()
     ..color = const Color(0x50616161)
@@ -51,7 +46,6 @@ class _JoyButtonsBasePainter extends CustomPainter {
     canvas.drawCircle(center, radius - 12, _centerPaint);
     canvas.drawCircle(center, radius - 60, _centerPaint);
 
-    if (mode != JoyButtonsMode.horizontal) {
       // draw vertical arrows
       canvas.drawLine(Offset(center.dx - 30, center.dy - 50),
           Offset(center.dx, center.dy - 70), _linePaint);
@@ -61,9 +55,7 @@ class _JoyButtonsBasePainter extends CustomPainter {
           Offset(center.dx, center.dy + 70), _linePaint);
       canvas.drawLine(Offset(center.dx + 30, center.dy + 50),
           Offset(center.dx, center.dy + 70), _linePaint);
-    }
 
-    if (mode != JoyButtonsMode.vertical) {
       // draw horizontal arrows
       canvas.drawLine(Offset(center.dx - 50, center.dy - 30),
           Offset(center.dx - 70, center.dy), _linePaint);
@@ -73,7 +65,6 @@ class _JoyButtonsBasePainter extends CustomPainter {
           Offset(center.dx + 70, center.dy), _linePaint);
       canvas.drawLine(Offset(center.dx + 50, center.dy + 30),
           Offset(center.dx + 70, center.dy), _linePaint);
-    }
   }
 
   @override

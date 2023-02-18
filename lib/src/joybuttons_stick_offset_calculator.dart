@@ -5,7 +5,6 @@ import 'joybuttons.dart';
 
 abstract class ButtonsOffsetCalculator {
   Offset calculate({
-    required JoyButtonsMode mode,
     required Offset startDragStickPosition,
     required Offset currentDragStickPosition,
     required Size baseSize,
@@ -17,7 +16,6 @@ class CircleStickOffsetCalculator implements ButtonsOffsetCalculator {
 
   @override
   Offset calculate({
-    required JoyButtonsMode mode,
     required Offset startDragStickPosition,
     required Offset currentDragStickPosition,
     required Size baseSize,
@@ -37,17 +35,7 @@ class CircleStickOffsetCalculator implements ButtonsOffsetCalculator {
     final xOffset = x / radius;
     final yOffset = y / radius;
 
-    switch (mode) {
-      case JoyButtonsMode.all:
-        return Offset(xOffset, yOffset);
-      case JoyButtonsMode.vertical:
-        return Offset(0.0, yOffset);
-      case JoyButtonsMode.horizontal:
-        return Offset(xOffset, 0.0);
-      case JoyButtonsMode.horizontalAndVertical:
-        return Offset(xOffset.abs() > yOffset.abs() ? xOffset : 0,
-            yOffset.abs() > xOffset.abs() ? yOffset : 0);
-    }
+    return Offset(xOffset, yOffset);
   }
 }
 
@@ -56,7 +44,6 @@ class RectangleStickOffsetCalculator implements ButtonsOffsetCalculator {
 
   @override
   Offset calculate({
-    required JoyButtonsMode mode,
     required Offset startDragStickPosition,
     required Offset currentDragStickPosition,
     required Size baseSize,
@@ -67,17 +54,7 @@ class RectangleStickOffsetCalculator implements ButtonsOffsetCalculator {
     final xOffset = _normalizeOffset(x / (baseSize.width / 2));
     final yOffset = _normalizeOffset(y / (baseSize.height / 2));
 
-    switch (mode) {
-      case JoyButtonsMode.all:
-        return Offset(xOffset, yOffset);
-      case JoyButtonsMode.vertical:
-        return Offset(0.0, yOffset);
-      case JoyButtonsMode.horizontal:
-        return Offset(xOffset, 0.0);
-      case JoyButtonsMode.horizontalAndVertical:
-        return Offset(xOffset.abs() > yOffset.abs() ? xOffset : 0,
-            yOffset.abs() > xOffset.abs() ? yOffset : 0);
-    }
+    return Offset(xOffset, yOffset);
   }
 
   double _normalizeOffset(double point) {
