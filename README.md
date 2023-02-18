@@ -9,10 +9,10 @@
 
 A virtual JoyButtons for Flutter applications. Inspired by Gravitar for mobile. 
 
-JoyButtons are a variant of virtual Joysticks. Tapping multiple buttons simultaneously on a touchscreen with one thumb is impossible. Multiple fingers are possible, but holding a phone and using a thumb for a joystick and fingers for multiple buttons is near impossible. This Widget solves some of those multiple button simultaneous tap use cases.
+JoyButtons are a variant of virtual Joysticks. Tapping multiple buttons simultaneously on a touchscreen with one thumb is impossible. Multiple fingers are possible, but holding a phone and using a thumb for a joystick and fingers for multiple buttons is near impossible. This Widget solves some of those multiple button simultaneous activation use cases.
 
-## Use cases:
-- activate one button, two buttons, or all buttons simultaneously
+## Primary use cases:
+- activate one button, two buttons, or all buttons simultaneously with a single thumb or finger
 - press and hold to continuously callback which buttons are pressed
 
 Thanks to [![flutter_joystick](https://img.shields.io/github/license/cybaker/flutter_joystick)](https://github.com/cybaker/flutter_joystick)
