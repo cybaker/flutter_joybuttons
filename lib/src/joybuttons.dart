@@ -123,18 +123,18 @@ class _JoyButtonsState extends State<JoyButtons> {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.5),
-            spreadRadius: 5,
+            color: Colors.black.withOpacity(0.4),
+            spreadRadius: 3,
             blurRadius: 7,
-            offset: const Offset(0, 3),
+            offset: const Offset(0, 4),
           )
         ],
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.lightGreen.shade900,
-            Colors.lightGreen.shade400,
+            Colors.lightBlue.shade400,
+            Colors.lightBlue.shade900,
           ],
         ),
       ),
@@ -162,7 +162,6 @@ class _JoyButtonsState extends State<JoyButtons> {
   void _dragStart(Offset touchPosition) {
     _runCallback();
     var offsetFromCenter = touchPosition - _center;
-    // debugPrint("Touch offset local $offsetFromCenter");
     _pressed = _calculatePressedButtons(offsetFromCenter);
     widget.onStickDragStart?.call();
   }
