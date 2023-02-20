@@ -93,9 +93,6 @@ class _JoyButtonsState extends State<JoyButtons> {
   /// Angle between button centers depends on how many buttons
   late double _angleStep;
 
-  /// Angle overlap between two buttons for multi button press outside of center button
-  late double _angleAdditionalOverlap;
-
   Timer? _callbackTimer;
   List<int> _pressed = [];
 
@@ -107,8 +104,7 @@ class _JoyButtonsState extends State<JoyButtons> {
     widget.controller?.onStickDragEnd = () => _dragEnd();
 
     _center = Offset(widget.size.width / 2, widget.size.height / 2);
-    _angleStep = 2 * math.pi / widget.allButtonList.length;
-    _angleAdditionalOverlap = _angleStep / 8;
+    _angleStep = 2 * math.pi / widget.buttonWidgets.length;
   }
 
   @override
@@ -209,22 +205,23 @@ class _JoyButtonsState extends State<JoyButtons> {
       pressed = widget.allButtonList;
     } else {
       // touch is not inside the ALL button, calculate which others are pressed
-      // 0 angle is West on canvas. Values from 0 to 2 * pi clockwise.
-      // First button is centered on angle pi/2.
-      var pressedAngle = math.atan2(offsetFromCenter.dy, offsetFromCenter.dx) + math.pi;
+      // 0 angle is North on canvas.
+      // First button is centered on angle 0.
 
-      var firstCenteredAngle = _angleStep;
-      var firstBeginOverlapAngle = firstCenteredAngle - (_angleStep / 2) - _angleAdditionalOverlap;
-      var sweepAngle = _angleStep + 2 * _angleAdditionalOverlap;
-      widget.allButtonList.asMap().forEach((index, value) {
-        double beginAngle = firstBeginOverlapAngle + index * _angleStep;
-        double endAngle = (beginAngle + sweepAngle);
-        // debugPrint("Angle is $pressedAngle, begin / end angle is $beginAngle / $endAngle");
-        if (pressedAngle > beginAngle && (pressedAngle <= endAngle) || (pressedAngle + 2*math.pi) <= endAngle) {
+      // pressedAngle values are from 0 to pi clockwise from North, 0 to -pi counterwise.
+      var pressedAngle = math.atan2(offsetFromCenter.dx, -offsetFromCenter.dy);
+
+      widget.buttonWidgets.asMap().forEach((index, value) {
+        var buttonAngle = index * _angleStep;
+        var deltaAngle = buttonAngle - pressedAngle;
+        if (deltaAngle > math.pi) {
+          deltaAngle = 2 * math.pi - deltaAngle;
+        }
+        debugPrint("pressedAngle is $pressedAngle, buttonAngle is $buttonAngle, deltaAngle is $deltaAngle");
+        if (deltaAngle.abs() < (_angleStep / 2)) {
           pressed.add(index);
         }
       });
-      // debugPrint("Angle is $pressedAngle");
     }
 
     return pressed;
