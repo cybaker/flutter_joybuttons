@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_joybuttons/src/joybuttons_button.dart';
@@ -18,6 +19,9 @@ class JoyButtons extends StatefulWidget {
   /// Widgets shown within bounds of JoyButtons.
   /// If empty, one circle widget is added.
   final List<JoyButtonsButton> buttonWidgets;
+
+  /// Buttons reported when the all button is pressed
+  final List<int> allButtonList;
 
   /// All button (center button) scale from total Widget size. 1.0 is full size, 0.0 is zero size.
   final double allButtonScale;
@@ -45,7 +49,9 @@ class JoyButtons extends StatefulWidget {
     required this.listener,
     this.size = const Size(200, 200),
     this.period = const Duration(milliseconds: 100),
-    this.base = const JoyButtonsBase(size: Size(200, 200),),
+    this.base = const JoyButtonsBase(
+      size: Size(200, 200),
+    ),
     this.buttonWidgets = const [
       JoyButtonsButton(),
       JoyButtonsButton(
@@ -67,6 +73,7 @@ class JoyButtons extends StatefulWidget {
         ),
       ),
     ],
+    this.allButtonList = const [0, 1, 2, 3],
     this.allButtonScale = 0.4,
     this.touchOffsetCalculator = const CircleStickOffsetCalculator(),
     this.controller,
@@ -82,6 +89,13 @@ class _JoyButtonsState extends State<JoyButtons> {
   final GlobalKey _baseKey = GlobalKey();
 
   late Offset _center;
+
+  /// Angle between button centers depends on how many buttons
+  late double _angleStep;
+
+  /// Angle overlap between two buttons for multi button press outside of center button
+  late double _angleAdditionalOverlap;
+
   Timer? _callbackTimer;
   List<int> _pressed = [];
 
@@ -92,7 +106,9 @@ class _JoyButtonsState extends State<JoyButtons> {
     widget.controller?.onStickDragUpdate = (globalPosition) => _dragUpdate(globalPosition);
     widget.controller?.onStickDragEnd = () => _dragEnd();
 
-    _center = Offset(widget.size.width/2, widget.size.height/2);
+    _center = Offset(widget.size.width / 2, widget.size.height / 2);
+    _angleStep = 2 * math.pi / widget.allButtonList.length;
+    _angleAdditionalOverlap = _angleStep / 8;
   }
 
   @override
@@ -142,15 +158,15 @@ class _JoyButtonsState extends State<JoyButtons> {
   }
 
   Widget getButtons(List<JoyButtonsButton> buttonWidgets) {
-    var divAngle = 2 * 3.1415926 / buttonWidgets.length;
-    double offset = widget.size.height/4;
+    var divAngle = _angleStep;
+    double heightOffset = widget.size.height / 4;
 
     List<Widget> widgets = [
       for (MapEntry element in buttonWidgets.asMap().entries)
         Transform.rotate(
           angle: element.key * divAngle,
           child: Transform.translate(
-            offset: Offset(0, -offset),
+            offset: Offset(0, -heightOffset),
             child: element.value,
           ),
         )
@@ -184,16 +200,31 @@ class _JoyButtonsState extends State<JoyButtons> {
     });
   }
 
-  List<int> _calculatePressedButtons(Offset touchOffset) {
+  List<int> _calculatePressedButtons(Offset offsetFromCenter) {
     List<int> pressed = [];
 
-    debugPrint("Distance is ${touchOffset.distance}");
-    if (touchOffset.distance < widget.allButtonScale * widget.size.width/2) {
+    // debugPrint("Distance is ${offsetFromCenter.distance}");
+    if (offsetFromCenter.distance < widget.allButtonScale * widget.size.width / 2) {
       // All buttons are pressed in the middle
-      pressed = List.generate(widget.buttonWidgets.length, (index) => index);
-    } else { // touch is not inside the ALL button, calculate which others are pressed
-      pressed = [3];
-      // TODO calculate which button(s) are tapped
+      pressed = widget.allButtonList;
+    } else {
+      // touch is not inside the ALL button, calculate which others are pressed
+      // 0 angle is West on canvas. Values from 0 to 2 * pi clockwise.
+      // First button is centered on angle pi/2.
+      var pressedAngle = math.atan2(offsetFromCenter.dy, offsetFromCenter.dx) + math.pi;
+
+      var firstCenteredAngle = _angleStep;
+      var firstBeginOverlapAngle = firstCenteredAngle - (_angleStep / 2) - _angleAdditionalOverlap;
+      var sweepAngle = _angleStep + 2 * _angleAdditionalOverlap;
+      widget.allButtonList.asMap().forEach((index, value) {
+        double beginAngle = firstBeginOverlapAngle + index * _angleStep;
+        double endAngle = (beginAngle + sweepAngle);
+        // debugPrint("Angle is $pressedAngle, begin / end angle is $beginAngle / $endAngle");
+        if (pressedAngle > beginAngle && (pressedAngle <= endAngle) || (pressedAngle + 2*math.pi) <= endAngle) {
+          pressed.add(index);
+        }
+      });
+      // debugPrint("Angle is $pressedAngle");
     }
 
     return pressed;
