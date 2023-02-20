@@ -43,15 +43,6 @@ class MainPage extends StatelessWidget {
             },
             child: const Text('JoyButtons'),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const JoyButtonsAreaExample()),
-              );
-            },
-            child: const Text('JoyButtons Area'),
-          ),
         ],
       ),
     );
@@ -66,7 +57,6 @@ class JoyButtonsExample extends StatefulWidget {
 }
 
 class _JoyButtonsExampleState extends State<JoyButtonsExample> {
-  var _pressedButtons = <Widget>[];
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +70,6 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
-                // buttonWidgets: buttons,
                 listener: (details) {
                   setState(() {
                     debugPrint("Buttons pressed are ${details.pressed}");
@@ -108,51 +97,6 @@ List<Widget> buttons = [
           child: Text("Down"),
         ),
   ];
-
-class JoyButtonsAreaExample extends StatefulWidget {
-  const JoyButtonsAreaExample({Key? key}) : super(key: key);
-
-  @override
-  _JoyButtonsAreaExampleState createState() => _JoyButtonsAreaExampleState();
-}
-
-class _JoyButtonsAreaExampleState extends State<JoyButtonsAreaExample> {
-  double _x = 100;
-  double _y = 100;
-  final JoyButtonsMode _joyButtonsMode = JoyButtonsMode.all;
-
-  @override
-  void didChangeDependencies() {
-    _x = MediaQuery.of(context).size.width / 2 - ballSize / 2;
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('JoyButtons Area'),
-      ),
-      body: SafeArea(
-        child: JoyButtonsArea(
-          mode: _joyButtonsMode,
-          initialJoyButtonsAlignment: const Alignment(0, 0.8),
-          listener: (details) {
-            setState(() {
-              _x = _x + step * details.x;
-              _y = _y + step * details.y;
-            });
-          },
-          child: Stack(
-            children: [
-              Ball(_x, _y),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class Ball extends StatelessWidget {
   final double x;

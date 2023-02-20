@@ -1,9 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'joybuttons.dart';
-
-abstract class ButtonsOffsetCalculator {
+abstract class TouchOffsetCalculator {
   Offset calculate({
     required Offset startDragStickPosition,
     required Offset currentDragStickPosition,
@@ -11,7 +9,7 @@ abstract class ButtonsOffsetCalculator {
   });
 }
 
-class CircleStickOffsetCalculator implements ButtonsOffsetCalculator {
+class CircleStickOffsetCalculator implements TouchOffsetCalculator {
   const CircleStickOffsetCalculator();
 
   @override
@@ -39,7 +37,7 @@ class CircleStickOffsetCalculator implements ButtonsOffsetCalculator {
   }
 }
 
-class RectangleStickOffsetCalculator implements ButtonsOffsetCalculator {
+class RectangleStickOffsetCalculator implements TouchOffsetCalculator {
   const RectangleStickOffsetCalculator();
 
   @override
@@ -58,12 +56,8 @@ class RectangleStickOffsetCalculator implements ButtonsOffsetCalculator {
   }
 
   double _normalizeOffset(double point) {
-    if (point > 1) {
-      return 1;
-    }
-    if (point < -1) {
-      return -1;
-    }
+    if (point > 1) { return 1; }
+    if (point < -1) { return -1; }
     return point;
   }
 }

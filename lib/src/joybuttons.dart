@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_joybuttons/src/joybuttons_widget.dart';
+import 'package:flutter_joybuttons/src/joybuttons_button.dart';
 
 import 'joybuttons_base.dart';
 import 'joybuttons_controller.dart';
-import 'joybuttons_stick_offset_calculator.dart';
+import 'joybuttons_touch_offset_calculator.dart';
 
 /// JoyButtons widget
 class JoyButtons extends StatefulWidget {
@@ -17,7 +17,13 @@ class JoyButtons extends StatefulWidget {
 
   /// Widgets shown within bounds of JoyButtons.
   /// If empty, one circle widget is added.
-  final List<JoyButtonsWidget> buttonWidgets;
+  final List<JoyButtonsButton> buttonWidgets;
+
+  /// All button (center button) scale from total Widget size. 1.0 is full size, 0.0 is zero size.
+  final double allButtonScale;
+
+  /// JoyButtons size, default 200, 200. Width and Height must be the same.
+  final Size size;
 
   /// Widget that renders joyButtons base, by default [JoyButtonsBase].
   final Widget base;
@@ -25,33 +31,35 @@ class JoyButtons extends StatefulWidget {
   /// Controller allows to control joyButtons events outside the widget.
   final JoyButtonsController? controller;
 
-  /// Calculate offset of the stick based on the stick drag start position and the current stick position.
-  final ButtonsOffsetCalculator stickOffsetCalculator;
+  /// Calculate offset of the touch from center based on the drag start position and the current position.
+  final TouchOffsetCalculator touchOffsetCalculator;
 
   /// Callback, which is called when the stick starts dragging.
   final Function? onStickDragStart;
 
   /// Callback, which is called when the stick released.
-  final Function? onStickDragEnd;
+  final Function? onTouchDragEnd;
 
   const JoyButtons({
     Key? key,
     required this.listener,
+    this.size = const Size(200, 200),
     this.period = const Duration(milliseconds: 100),
-    this.base = const JoyButtonsBase(),
+    this.base = const JoyButtonsBase(size: Size(200, 200),),
     this.buttonWidgets = const [
-      JoyButtonsWidget(),
-      JoyButtonsWidget(
+      JoyButtonsButton(),
+      JoyButtonsButton(
         title: Text("B", style: TextStyle(color: Colors.white, fontSize: 24)),
       ),
-      JoyButtonsWidget(
+      JoyButtonsButton(
         title: Text("C", style: TextStyle(color: Colors.white, fontSize: 24)),
       ),
     ],
-    this.stickOffsetCalculator = const CircleStickOffsetCalculator(),
+    this.allButtonScale = 0.4,
+    this.touchOffsetCalculator = const CircleStickOffsetCalculator(),
     this.controller,
     this.onStickDragStart,
-    this.onStickDragEnd,
+    this.onTouchDragEnd,
   }) : super(key: key);
 
   @override
@@ -61,25 +69,27 @@ class JoyButtons extends StatefulWidget {
 class _JoyButtonsState extends State<JoyButtons> {
   final GlobalKey _baseKey = GlobalKey();
 
-  Offset _stickOffset = Offset.zero;
+  Offset _touchOffset = Offset.zero;
+  late Offset _center;
   Timer? _callbackTimer;
-  Offset _startDragStickPosition = Offset.zero;
   List<int> _pressed = [];
 
   @override
   void initState() {
     super.initState();
-    widget.controller?.onStickDragStart = (globalPosition) => _stickDragStart(globalPosition);
-    widget.controller?.onStickDragUpdate = (globalPosition) => _stickDragUpdate(globalPosition);
-    widget.controller?.onStickDragEnd = () => _stickDragEnd();
+    widget.controller?.onStickDragStart = (globalPosition) => _dragStart(globalPosition);
+    widget.controller?.onStickDragUpdate = (globalPosition) => _dragUpdate(globalPosition);
+    widget.controller?.onStickDragEnd = () => _dragEnd();
+
+    _center = Offset(widget.size.width/2, widget.size.height/2);
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onPanStart: (point) => _stickDragStart(point.globalPosition),
-      onPanUpdate: (point) => _stickDragUpdate(point.globalPosition),
-      onPanEnd: (point) => _stickDragEnd(),
+      onPanStart: (point) => _dragStart(point.localPosition),
+      onPanUpdate: (point) => _dragUpdate(point.localPosition),
+      onPanEnd: (point) => _dragEnd(),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -96,8 +106,8 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   Container allWidget() {
     return Container(
-      width: 100,
-      height: 100,
+      width: widget.size.width * widget.allButtonScale,
+      height: widget.size.height * widget.allButtonScale,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: [
@@ -112,15 +122,15 @@ class _JoyButtonsState extends State<JoyButtons> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.lightBlue.shade900,
-            Colors.lightBlue.shade400,
+            Colors.lightGreen.shade900,
+            Colors.lightGreen.shade400,
           ],
         ),
       ),
     );
   }
 
-  Widget getButtons(List<JoyButtonsWidget> buttonWidgets) {
+  Widget getButtons(List<JoyButtonsButton> buttonWidgets) {
     var divAngle = 2 * 3.1415926 / buttonWidgets.length;
 
     List<Widget> widgets = [
@@ -137,54 +147,49 @@ class _JoyButtonsState extends State<JoyButtons> {
     return Stack(children: widgets);
   }
 
-  void _stickDragStart(Offset globalPosition) {
+  void _dragStart(Offset globalPosition) {
     _runCallback();
-    _startDragStickPosition = globalPosition;
     widget.onStickDragStart?.call();
   }
 
-  void _stickDragUpdate(Offset globalPosition) {
-    final baseRenderBox = _baseKey.currentContext!.findRenderObject()! as RenderBox;
-
-    final stickOffset = widget.stickOffsetCalculator.calculate(
-      startDragStickPosition: _startDragStickPosition,
-      currentDragStickPosition: globalPosition,
-      baseSize: baseRenderBox.size,
-    );
-
-    _pressed = _calculatePressedButtons(stickOffset);
+  void _dragUpdate(Offset touchPosition) {
+    var offsetFromCenter = touchPosition - _center;
+    debugPrint("Touch offset local $offsetFromCenter");
+    _pressed = _calculatePressedButtons(offsetFromCenter);
 
     setState(() {
-      _stickOffset = stickOffset;
+      _touchOffset = offsetFromCenter;
     });
   }
 
-  void _stickDragEnd() {
+  void _dragEnd() {
     setState(() {
-      _stickOffset = Offset.zero;
+      _touchOffset = Offset.zero;
     });
 
     _callbackTimer?.cancel();
     //send zero offset when the stick is released
-    widget.listener(TouchDragDetails(_stickOffset.dx, _stickOffset.dy, _pressed));
-    _startDragStickPosition = Offset.zero;
-    widget.onStickDragEnd?.call();
+    widget.listener(TouchDragDetails(_touchOffset.dx, _touchOffset.dy, _pressed));
+    widget.onTouchDragEnd?.call();
   }
 
   void _runCallback() {
     _callbackTimer = Timer.periodic(widget.period, (timer) {
-      widget.listener(TouchDragDetails(_stickOffset.dx, _stickOffset.dy, _pressed));
+      widget.listener(TouchDragDetails(_touchOffset.dx, _touchOffset.dy, _pressed));
     });
   }
 
-  List<int> _calculatePressedButtons(Offset stickOffset) {
+  List<int> _calculatePressedButtons(Offset touchOffset) {
     List<int> pressed = [];
 
-    debugPrint("Distance is ${_stickOffset.distance}");
-    if (stickOffset.distance < 0.5)
-      pressed = [1, 2, 3];
-    else
+    debugPrint("Distance is ${touchOffset.distance}");
+    if (touchOffset.distance < widget.allButtonScale * widget.size.width/2) {
+      // All buttons are pressed in the middle
+      pressed = List.generate(widget.buttonWidgets.length, (index) => index);
+    } else {
       pressed = [3];
+      // TODO calculate which button(s) are tapped
+    }
 
     return pressed;
   }
