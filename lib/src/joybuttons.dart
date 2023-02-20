@@ -49,10 +49,22 @@ class JoyButtons extends StatefulWidget {
     this.buttonWidgets = const [
       JoyButtonsButton(),
       JoyButtonsButton(
-        title: Text("B", style: TextStyle(color: Colors.white, fontSize: 24)),
+        title: Padding(
+          padding: EdgeInsets.only(top: 16.0),
+          child: Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
+        ),
       ),
       JoyButtonsButton(
-        title: Text("C", style: TextStyle(color: Colors.white, fontSize: 24)),
+        title: Padding(
+          padding: EdgeInsets.only(top: 16.0),
+          child: Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
+        ),
+      ),
+      JoyButtonsButton(
+        title: Padding(
+          padding: EdgeInsets.only(top: 16.0),
+          child: Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
+        ),
       ),
     ],
     this.allButtonScale = 0.4,
@@ -132,13 +144,14 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   Widget getButtons(List<JoyButtonsButton> buttonWidgets) {
     var divAngle = 2 * 3.1415926 / buttonWidgets.length;
+    double offset = widget.size.height/4;
 
     List<Widget> widgets = [
       for (MapEntry element in buttonWidgets.asMap().entries)
         Transform.rotate(
           angle: element.key * divAngle,
           child: Transform.translate(
-            offset: const Offset(0, -75),
+            offset: Offset(0, -offset),
             child: element.value,
           ),
         )

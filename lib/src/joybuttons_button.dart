@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 
 class JoyButtonsButton extends StatelessWidget {
-  final Text title;
+  final Widget title;
 
   final MaterialColor widgetColor;
 
-  const JoyButtonsButton({Key? key, this.title = const Text("A", style: TextStyle(color: Colors.white, fontSize: 24),), this.widgetColor = Colors.blue}) : super(key: key);
+  const JoyButtonsButton({
+    Key? key,
+    this.title = const Padding(
+      padding: EdgeInsets.only(top: 16.0),
+      child: Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
+    ),
+    this.widgetColor = Colors.blue
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.center, children: [
+    return Stack(alignment: Alignment.topCenter, children: [
       Container(
-        width: 60,
-        height: 60,
+        width: 75,
+        height: 100,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: widgetColor.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3),
-            )
-          ],
+          borderRadius: BorderRadius.circular(50),
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
