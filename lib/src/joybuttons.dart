@@ -81,7 +81,6 @@ class JoyButtons extends StatefulWidget {
 class _JoyButtonsState extends State<JoyButtons> {
   final GlobalKey _baseKey = GlobalKey();
 
-  Offset _touchOffset = Offset.zero;
   late Offset _center;
   Timer? _callbackTimer;
   List<int> _pressed = [];
@@ -160,35 +159,29 @@ class _JoyButtonsState extends State<JoyButtons> {
     return Stack(children: widgets);
   }
 
-  void _dragStart(Offset globalPosition) {
+  void _dragStart(Offset touchPosition) {
     _runCallback();
+    var offsetFromCenter = touchPosition - _center;
+    // debugPrint("Touch offset local $offsetFromCenter");
+    _pressed = _calculatePressedButtons(offsetFromCenter);
     widget.onStickDragStart?.call();
   }
 
   void _dragUpdate(Offset touchPosition) {
     var offsetFromCenter = touchPosition - _center;
-    debugPrint("Touch offset local $offsetFromCenter");
+    // debugPrint("Touch offset local $offsetFromCenter");
     _pressed = _calculatePressedButtons(offsetFromCenter);
-
-    setState(() {
-      _touchOffset = offsetFromCenter;
-    });
   }
 
   void _dragEnd() {
-    setState(() {
-      _touchOffset = Offset.zero;
-    });
-
     _callbackTimer?.cancel();
-    //send zero offset when the stick is released
-    widget.listener(TouchDragDetails(_touchOffset.dx, _touchOffset.dy, _pressed));
+    widget.listener(TouchDragDetails(_pressed));
     widget.onTouchDragEnd?.call();
   }
 
   void _runCallback() {
     _callbackTimer = Timer.periodic(widget.period, (timer) {
-      widget.listener(TouchDragDetails(_touchOffset.dx, _touchOffset.dy, _pressed));
+      widget.listener(TouchDragDetails(_pressed));
     });
   }
 
@@ -199,7 +192,7 @@ class _JoyButtonsState extends State<JoyButtons> {
     if (touchOffset.distance < widget.allButtonScale * widget.size.width/2) {
       // All buttons are pressed in the middle
       pressed = List.generate(widget.buttonWidgets.length, (index) => index);
-    } else {
+    } else { // touch is not inside the ALL button, calculate which others are pressed
       pressed = [3];
       // TODO calculate which button(s) are tapped
     }
@@ -218,29 +211,8 @@ typedef TouchDragCallback = void Function(TouchDragDetails details);
 
 /// Contains the stick offset from the center of the base.
 class TouchDragDetails {
-  /// x - the stick offset in the horizontal direction. Can be from -1.0 to +1.0.
-  final double x;
-
-  /// y - the stick offset in the vertical direction. Can be from -1.0 to +1.0.
-  final double y;
-
-  /// List of buttons pressed
+  /// List of input buttons pressed
   final List<int> pressed;
 
-  TouchDragDetails(this.x, this.y, this.pressed);
-}
-
-/// Possible directions of the joyButtons stick.
-enum JoyButtonsMode {
-  /// allow move the stick in any direction: vertical, horizontal and diagonal.
-  all,
-
-  /// allow move the stick only in vertical direction.
-  vertical,
-
-  /// allow move the stick only in horizontal direction.
-  horizontal,
-
-  /// allow move the stick only in horizontal and vertical directions, not diagonal.
-  horizontalAndVertical,
+  TouchDragDetails(this.pressed);
 }
