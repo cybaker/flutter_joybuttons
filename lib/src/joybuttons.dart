@@ -20,11 +20,11 @@ class JoyButtons extends StatefulWidget {
   /// If empty, one circle widget is added.
   final List<JoyButtonsButton> buttonWidgets;
 
-  /// Buttons reported when the all button is pressed
-  final List<int> allButtonList;
+  /// Buttons reported when the all button is pressed. Defaults to all [buttonWidgets] reported.
+  final List<int> centerButtonOutput;
 
-  /// All button (center button) scale from total Widget size. 1.0 is full size, 0.0 is zero size.
-  final double allButtonScale;
+  /// Center button (center button) scale from total Widget size. 1.0 is full size, 0.0 is zero size.
+  final double centerButtonScale;
 
   /// JoyButtons size, default 200, 200. Width and Height must be the same.
   final Size size;
@@ -73,8 +73,8 @@ class JoyButtons extends StatefulWidget {
         ),
       ),
     ],
-    this.allButtonList = const [0, 1, 2, 3],
-    this.allButtonScale = 0.4,
+    this.centerButtonOutput = const [],
+    this.centerButtonScale = 0.4,
     this.touchOffsetCalculator = const CircleStickOffsetCalculator(),
     this.controller,
     this.onStickDragStart,
@@ -93,6 +93,8 @@ class _JoyButtonsState extends State<JoyButtons> {
   /// Angle between button centers depends on how many buttons
   late double _angleStep;
 
+  late List<int> _centerButtonList;
+
   Timer? _callbackTimer;
   List<int> _pressed = [];
 
@@ -104,7 +106,14 @@ class _JoyButtonsState extends State<JoyButtons> {
     widget.controller?.onStickDragEnd = () => _dragEnd();
 
     _center = Offset(widget.size.width / 2, widget.size.height / 2);
+
     _angleStep = 2 * math.pi / widget.buttonWidgets.length;
+
+    if (widget.centerButtonOutput.isEmpty) {
+      _centerButtonList = List.generate(widget.buttonWidgets.length, (index) => index);
+    } else {
+      _centerButtonList = widget.centerButtonOutput;
+    }
   }
 
   @override
@@ -121,16 +130,16 @@ class _JoyButtonsState extends State<JoyButtons> {
             child: widget.base,
           ),
           getButtons(widget.buttonWidgets),
-          allWidget(),
+          centerWidget(),
         ],
       ),
     );
   }
 
-  Container allWidget() {
+  Container centerWidget() {
     return Container(
-      width: widget.size.width * widget.allButtonScale,
-      height: widget.size.height * widget.allButtonScale,
+      width: widget.size.width * widget.centerButtonScale,
+      height: widget.size.height * widget.centerButtonScale,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: [
@@ -199,16 +208,15 @@ class _JoyButtonsState extends State<JoyButtons> {
   List<int> _calculatePressedButtons(Offset offsetFromCenter) {
     List<int> pressed = [];
 
-    // debugPrint("Distance is ${offsetFromCenter.distance}");
-    if (offsetFromCenter.distance < widget.allButtonScale * widget.size.width / 2) {
-      // All buttons are pressed in the middle
-      pressed = widget.allButtonList;
+    if (offsetFromCenter.distance < widget.centerButtonScale * widget.size.width / 2) {
+      // Center button pressed
+      pressed = _centerButtonList;
     } else {
-      // touch is not inside the ALL button, calculate which others are pressed
+      // touch was outside the Center button, calculate which others are pressed
       // 0 angle is North on canvas.
       // First button is centered on angle 0.
-
       // pressedAngle values are from 0 to pi clockwise from North, 0 to -pi counterwise.
+
       var pressedAngle = math.atan2(offsetFromCenter.dx, -offsetFromCenter.dy);
 
       widget.buttonWidgets.asMap().forEach((index, value) {
@@ -217,7 +225,6 @@ class _JoyButtonsState extends State<JoyButtons> {
         if (deltaAngle > math.pi) {
           deltaAngle = 2 * math.pi - deltaAngle;
         }
-        debugPrint("pressedAngle is $pressedAngle, buttonAngle is $buttonAngle, deltaAngle is $deltaAngle");
         if (deltaAngle.abs() < (_angleStep / 2)) {
           pressed.add(index);
         }
