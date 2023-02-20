@@ -38,8 +38,7 @@ class MainPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const JoyButtonsExample()),
+                MaterialPageRoute(builder: (context) => const JoyButtonsExample()),
               );
             },
             child: const Text('JoyButtons'),
@@ -48,8 +47,7 @@ class MainPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const JoyButtonsAreaExample()),
+                MaterialPageRoute(builder: (context) => const JoyButtonsAreaExample()),
               );
             },
             child: const Text('JoyButtons Area'),
@@ -68,8 +66,7 @@ class JoyButtonsExample extends StatefulWidget {
 }
 
 class _JoyButtonsExampleState extends State<JoyButtonsExample> {
-  var _joyButtonsNum = 2;
-  var _buttonNameList = <String>[];
+  var _pressedButtons = <Widget>[];
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +80,12 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
+                // buttonWidgets: buttons,
                 listener: (details) {
                   setState(() {
+                    debugPrint("Buttons pressed are ${details.pressed}");
                   });
                 },
-                buttonWidgets: [],
               ),
             ),
           ],
@@ -96,6 +94,20 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
     );
   }
 }
+
+List<Widget> buttons = [
+    const Positioned(
+      top: 40,
+      child: ElevatedButton(
+            onPressed: null,
+            child: Text("Up"),
+          ),
+    ),
+    const ElevatedButton(
+          onPressed: null,
+          child: Text("Down"),
+        ),
+  ];
 
 class JoyButtonsAreaExample extends StatefulWidget {
   const JoyButtonsAreaExample({Key? key}) : super(key: key);
@@ -118,7 +130,9 @@ class _JoyButtonsAreaExampleState extends State<JoyButtonsAreaExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( title: const Text('JoyButtons Area'), ),
+      appBar: AppBar(
+        title: const Text('JoyButtons Area'),
+      ),
       body: SafeArea(
         child: JoyButtonsArea(
           mode: _joyButtonsMode,

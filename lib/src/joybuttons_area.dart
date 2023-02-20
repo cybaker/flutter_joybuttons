@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_joybuttons/flutter_joybuttons.dart';
 
 import 'joybuttons.dart';
 import 'joybuttons_controller.dart';
-import 'joybuttons_stick.dart';
+import 'joybuttons_widget.dart';
 import 'joybuttons_stick_offset_calculator.dart';
 
 /// Allow to place the joyButtons in any place where user click.
@@ -21,7 +22,7 @@ class JoyButtonsArea extends StatefulWidget {
   final Duration period;
 
   /// Widget that renders joyButtons base, by default [JoyButtonsBase].
-  final Widget? base;
+  final Widget base;
 
   /// Widget that renders joyButtons stick, it places in the center of [base] widget, by default [JoyButtonsStick].
   final Widget stick;
@@ -44,8 +45,8 @@ class JoyButtonsArea extends StatefulWidget {
     this.initialJoyButtonsAlignment = Alignment.bottomCenter,
     required this.listener,
     this.period = const Duration(milliseconds: 100),
-    this.base,
-    this.stick = const JoybuttonsStick(),
+    this.base = const JoyButtonsBase(),
+    this.stick = const JoyButtonsWidget(),
     this.mode = JoyButtonsMode.all,
     this.stickOffsetCalculator = const CircleStickOffsetCalculator(),
     this.onStickDragStart,
@@ -88,7 +89,6 @@ class _JoyButtonsAreaState extends State<JoyButtonsArea> {
                 key: _joyButtonsKey,
                 controller: _controller,
                 listener: widget.listener,
-                buttonWidgets: [],
                 period: widget.period,
                 base: widget.base,
                 onStickDragStart: widget.onStickDragStart,
