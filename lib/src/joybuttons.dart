@@ -6,7 +6,6 @@ import 'package:flutter_joybuttons/src/joybuttons_button.dart';
 
 import 'joybuttons_base.dart';
 import 'joybuttons_controller.dart';
-import 'joybuttons_touch_offset_calculator.dart';
 
 /// JoyButtons widget
 class JoyButtons extends StatefulWidget {
@@ -34,9 +33,6 @@ class JoyButtons extends StatefulWidget {
 
   /// Controller allows to control joyButtons events outside the widget.
   final JoyButtonsController? controller;
-
-  /// Calculate offset of the touch from center based on the drag start position and the current position.
-  final TouchOffsetCalculator touchOffsetCalculator;
 
   /// Callback, which is called when the stick starts dragging.
   final Function? onStickDragStart;
@@ -75,7 +71,6 @@ class JoyButtons extends StatefulWidget {
     ],
     this.centerButtonOutput = const [],
     this.centerButtonScale = 0.4,
-    this.touchOffsetCalculator = const CircleStickOffsetCalculator(),
     this.controller,
     this.onStickDragStart,
     this.onTouchDragEnd,
