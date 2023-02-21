@@ -29,16 +29,8 @@ class JoyButtonsBase extends StatelessWidget {
 class _JoyButtonsBasePainter extends CustomPainter {
 
   final _borderPaint = Paint()
-    ..color = const Color(0x50616161)
-    ..strokeWidth = 10
-    ..style = PaintingStyle.stroke;
-  final _centerPaint = Paint()
-    ..color = const Color(0x50616161)
+    ..color = Colors.grey.shade300
     ..style = PaintingStyle.fill;
-  final _linePaint = Paint()
-    ..color = const Color(0x50616161)
-    ..strokeWidth = 5
-    ..style = PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {
