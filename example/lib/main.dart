@@ -79,18 +79,6 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
         child: Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
       ),
     ),
-    const JoyButtonsButton(
-      title: Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-    ),
-    const JoyButtonsButton(
-      title: Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-    ),
   ];
 
   @override
@@ -125,20 +113,6 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
                     height: dimension,
                     color: _pressed.contains(2) ? Colors.green : Colors.green.shade100,
                     child: const Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: dimension,
-                    height: dimension,
-                    color: _pressed.contains(3) ? Colors.green : Colors.green.shade100,
-                    child: const Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: dimension,
-                    height: dimension,
-                    color: _pressed.contains(4) ? Colors.green : Colors.green.shade100,
-                    child: const Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
                   ),
                 ],
               ),
