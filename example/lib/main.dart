@@ -5,9 +5,6 @@ void main() {
   runApp(const JoyButtonsExampleApp());
 }
 
-const ballSize = 20.0;
-const step = 10.0;
-
 class JoyButtonsExampleApp extends StatelessWidget {
   const JoyButtonsExampleApp({Key? key}) : super(key: key);
 
@@ -60,6 +57,8 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
   List<int> _pressed = [];
   double dimension = 60;
 
+  double _numberOfButtons = 3;
+
   List<Widget> buttons = [
     const JoyButtonsButton(
       widgetColor: Colors.amber,
@@ -81,7 +80,62 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
         child: Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
       ),
     ),
+    const JoyButtonsButton(
+      widgetColor: Colors.lightGreen,
+      title: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ),
+    const JoyButtonsButton(
+      widgetColor: Colors.lightGreen,
+      title: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ),
   ];
+
+  List<Widget> getContainers(int number) {
+    List<Widget> all = [
+      Container(
+        alignment: Alignment.center,
+        width: dimension,
+        height: dimension,
+        color: _pressed.contains(0) ? Colors.amber : Colors.grey.shade200,
+        child: const Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+      Container(
+        alignment: Alignment.center,
+        width: dimension,
+        height: dimension,
+        color: _pressed.contains(1) ? Colors.blue : Colors.grey.shade200,
+        child: const Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+      Container(
+        alignment: Alignment.center,
+        width: dimension,
+        height: dimension,
+        color: _pressed.contains(2) ? Colors.green : Colors.grey.shade200,
+        child: const Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+      Container(
+        alignment: Alignment.center,
+        width: dimension,
+        height: dimension,
+        color: _pressed.contains(2) ? Colors.redAccent : Colors.grey.shade200,
+        child: const Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+      Container(
+        alignment: Alignment.center,
+        width: dimension,
+        height: dimension,
+        color: _pressed.contains(2) ? Colors.yellow : Colors.grey.shade200,
+        child: const Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ];
+    return all.take(number).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,43 +144,34 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Slider(
+              min: 2.0,
+              max: 5.0,
+              value: _numberOfButtons,
+              divisions: 3,
+              label: '${_numberOfButtons.round()}',
+              onChanged: (value) {
+                setState(() {
+                  _numberOfButtons = value;
+                });
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(32.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: dimension,
-                    height: dimension,
-                    color: _pressed.contains(0) ? Colors.amber : Colors.grey.shade200,
-                    child: const Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: dimension,
-                    height: dimension,
-                    color: _pressed.contains(1) ? Colors.blue : Colors.grey.shade200,
-                    child: const Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: dimension,
-                    height: dimension,
-                    color: _pressed.contains(2) ? Colors.green : Colors.grey.shade200,
-                    child: const Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
-                  ),
+                  ...getContainers(_numberOfButtons.round()),
                 ],
               ),
             ),
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
-                buttonWidgets: buttons,
+                buttonWidgets: buttons.take(_numberOfButtons.round()).toList(),
                 listener: (details) {
                   setState(() {
                     _pressed = details.pressed;
-                    debugPrint("Buttons pressed are ${details.pressed}");
                   });
                 },
               ),

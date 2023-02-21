@@ -165,13 +165,13 @@ class _JoyButtonsState extends State<JoyButtons> {
   }
 
   Widget getButtons(List<Widget> buttonWidgets) {
-    var divAngle = _angleStep;
+    _angleStep = 2 * math.pi / widget.buttonWidgets.length;
     double heightOffset = widget.size.height / 4;
 
     List<Widget> widgets = [
       for (MapEntry element in buttonWidgets.asMap().entries)
         Transform.rotate(
-          angle: element.key * divAngle,
+          angle: element.key * _angleStep,
           child: Transform.translate(
             offset: Offset(0, -heightOffset),
             child: element.value,
@@ -191,7 +191,6 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   void _dragUpdate(Offset touchPosition) {
     var offsetFromCenter = touchPosition - _center;
-    // debugPrint("Touch offset local $offsetFromCenter");
     _pressed = _calculatePressedButtons(offsetFromCenter);
   }
 
