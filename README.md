@@ -42,4 +42,4 @@ Customizations
 Number of outer buttons.
 Button background color, shape, size, and text.
 Center button color and scale.
-overlayScale from 0.0 (alone) to 1.0 (always with an adjacent) or alone and with an adjacent (default of about 0.4)
+simultaneousOverlapScale from 0.0 (alone) to 1.0 (always with an adjacent) or alone and with an adjacent (default of about 0.4)

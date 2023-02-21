@@ -29,7 +29,7 @@ class JoyButtons extends StatefulWidget {
   /// outside buttons, not the center button. This allows adjacent buttons to be pressed simultaneously.
   /// overlapScale is relative to the radians between two outside buttons. 0.0 means adding no additional overlap,
   /// 1.0 means adding additional overlap radians equal to the radians between two outside buttons.
-  final double overlapScale;
+  final double simultaneousOverlapScale;
 
   /// JoyButtons size, default 200, 200. Width and Height must be the same.
   final Size size;
@@ -77,7 +77,7 @@ class JoyButtons extends StatefulWidget {
     ],
     this.centerButtonOutput = const [],
     this.centerButtonScale = 0.4,
-    this.overlapScale = 0.4,
+    this.simultaneousOverlapScale = 0.4,
     this.controller,
     this.onTouchDragStart,
     this.onTouchDragEnd,
@@ -228,7 +228,7 @@ class _JoyButtonsState extends State<JoyButtons> {
         if (deltaAngle > math.pi) {
           deltaAngle = 2 * math.pi - deltaAngle;
         }
-        if (deltaAngle.abs() < ((1 + widget.overlapScale) * _angleStep / 2)) {
+        if (deltaAngle.abs() < ((1 + widget.simultaneousOverlapScale) * _angleStep / 2)) {
           pressed.add(index);
         }
       });
@@ -244,7 +244,7 @@ class _JoyButtonsState extends State<JoyButtons> {
   }
 }
 
-typedef TouchDragCallback = void Function(TouchDragActivated details);
+typedef TouchDragCallback = void Function(TouchDragActivated activity);
 
 /// Holds the pressed results
 class TouchDragActivated {
