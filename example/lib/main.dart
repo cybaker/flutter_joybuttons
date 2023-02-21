@@ -74,21 +74,21 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
       ),
     ),
     const JoyButtonsButton(
-      widgetColor: Colors.lightGreen,
+      widgetColor: Colors.green,
       title: Padding(
         padding: EdgeInsets.only(top: 16.0),
         child: Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
       ),
     ),
     const JoyButtonsButton(
-      widgetColor: Colors.lightGreen,
+      widgetColor: Colors.red,
       title: Padding(
         padding: EdgeInsets.only(top: 16.0),
         child: Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
       ),
     ),
     const JoyButtonsButton(
-      widgetColor: Colors.lightGreen,
+      widgetColor: Colors.yellow,
       title: Padding(
         padding: EdgeInsets.only(top: 16.0),
         child: Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
