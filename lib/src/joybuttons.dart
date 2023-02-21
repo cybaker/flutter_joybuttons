@@ -9,10 +9,10 @@ import 'joybuttons_controller.dart';
 
 /// JoyButtons widget
 class JoyButtons extends StatefulWidget {
-  /// Callback, which is called with [period] frequency when the stick is dragged.
+  /// Callback, which is called with [period] frequency during dragging.
   final TouchDragCallback listener;
 
-  /// Frequency of calling [listener] from the moment the stick is dragged, by default 100 milliseconds.
+  /// Frequency of calling [listener] from while dragging, by default 100 milliseconds.
   final Duration period;
 
   /// Widgets shown within bounds of JoyButtons.
@@ -22,8 +22,14 @@ class JoyButtons extends StatefulWidget {
   /// Buttons reported when the all button is pressed. Defaults to all [buttonWidgets] reported.
   final List<int> centerButtonOutput;
 
-  /// Center button (center button) scale from total Widget size. 1.0 is full size, 0.0 is zero size.
+  /// Center button scale relative to total Widget size. 1.0 is full size, 0.0 is zero size. Defalut is 0.4.
   final double centerButtonScale;
+
+  /// Overlap on both sides of a button's tap region, from 0.0 to 1.0. This adds to the tappable region for all
+  /// outside buttons, not the center button. This allows adjacent buttons to be pressed simultaneously.
+  /// overlapScale is relative to the radians between two outside buttons. 0.0 means adding no additional overlap,
+  /// 1.0 means adding additional overlap radians equal to the radians between two outside buttons.
+  final double overlapScale;
 
   /// JoyButtons size, default 200, 200. Width and Height must be the same.
   final Size size;
@@ -34,10 +40,10 @@ class JoyButtons extends StatefulWidget {
   /// Controller allows to control joyButtons events outside the widget.
   final JoyButtonsController? controller;
 
-  /// Callback, which is called when the stick starts dragging.
-  final Function? onStickDragStart;
+  /// Callback, which is called when dragging starts.
+  final Function? onTouchDragStart;
 
-  /// Callback, which is called when the stick released.
+  /// Callback, which is called when dragging stops.
   final Function? onTouchDragEnd;
 
   const JoyButtons({
@@ -71,8 +77,9 @@ class JoyButtons extends StatefulWidget {
     ],
     this.centerButtonOutput = const [],
     this.centerButtonScale = 0.4,
+    this.overlapScale = 0.4,
     this.controller,
-    this.onStickDragStart,
+    this.onTouchDragStart,
     this.onTouchDragEnd,
   }) : super(key: key);
 
@@ -96,9 +103,9 @@ class _JoyButtonsState extends State<JoyButtons> {
   @override
   void initState() {
     super.initState();
-    widget.controller?.onStickDragStart = (globalPosition) => _dragStart(globalPosition);
-    widget.controller?.onStickDragUpdate = (globalPosition) => _dragUpdate(globalPosition);
-    widget.controller?.onStickDragEnd = () => _dragEnd();
+    widget.controller?.onTouchDragStart = (globalPosition) => _dragStart(globalPosition);
+    widget.controller?.onTouchDragUpdate = (globalPosition) => _dragUpdate(globalPosition);
+    widget.controller?.onTouchDragEnd = () => _dragEnd();
 
     _center = Offset(widget.size.width / 2, widget.size.height / 2);
 
@@ -179,7 +186,7 @@ class _JoyButtonsState extends State<JoyButtons> {
     _runCallback();
     var offsetFromCenter = touchPosition - _center;
     _pressed = _calculatePressedButtons(offsetFromCenter);
-    widget.onStickDragStart?.call();
+    widget.onTouchDragStart?.call();
   }
 
   void _dragUpdate(Offset touchPosition) {
@@ -191,13 +198,13 @@ class _JoyButtonsState extends State<JoyButtons> {
   void _dragEnd() {
     _callbackTimer?.cancel();
     _pressed = [];
-    widget.listener(TouchDragDetails(_pressed));
+    widget.listener(TouchDragActivated(_pressed));
     widget.onTouchDragEnd?.call();
   }
 
   void _runCallback() {
     _callbackTimer = Timer.periodic(widget.period, (timer) {
-      widget.listener(TouchDragDetails(_pressed));
+      widget.listener(TouchDragActivated(_pressed));
     });
   }
 
@@ -221,7 +228,7 @@ class _JoyButtonsState extends State<JoyButtons> {
         if (deltaAngle > math.pi) {
           deltaAngle = 2 * math.pi - deltaAngle;
         }
-        if (deltaAngle.abs() < (_angleStep / 2)) {
+        if (deltaAngle.abs() < ((1 + widget.overlapScale) * _angleStep / 2)) {
           pressed.add(index);
         }
       });
@@ -237,12 +244,12 @@ class _JoyButtonsState extends State<JoyButtons> {
   }
 }
 
-typedef TouchDragCallback = void Function(TouchDragDetails details);
+typedef TouchDragCallback = void Function(TouchDragActivated details);
 
-/// Contains the stick offset from the center of the base.
-class TouchDragDetails {
+/// Holds the pressed results
+class TouchDragActivated {
   /// List of input buttons pressed
   final List<int> pressed;
 
-  TouchDragDetails(this.pressed);
+  TouchDragActivated(this.pressed);
 }
