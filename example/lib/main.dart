@@ -123,14 +123,14 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
         alignment: Alignment.center,
         width: dimension,
         height: dimension,
-        color: _pressed.contains(2) ? Colors.redAccent : Colors.grey.shade200,
+        color: _pressed.contains(3) ? Colors.redAccent : Colors.grey.shade200,
         child: const Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
       ),
       Container(
         alignment: Alignment.center,
         width: dimension,
         height: dimension,
-        color: _pressed.contains(2) ? Colors.yellow : Colors.grey.shade200,
+        color: _pressed.contains(4) ? Colors.yellow : Colors.grey.shade200,
         child: const Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
       ),
     ];
@@ -145,10 +145,10 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Slider(
-              min: 2.0,
+              min: 1.0,
               max: 5.0,
               value: _numberOfButtons,
-              divisions: 3,
+              divisions: 4,
               label: '${_numberOfButtons.round()}',
               onChanged: (value) {
                 setState(() {
@@ -168,6 +168,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
+                centerButtonOutput: List.generate(_numberOfButtons.round(), (index) => index),
                 buttonWidgets: buttons.take(_numberOfButtons.round()).toList(),
                 listener: (details) {
                   setState(() {

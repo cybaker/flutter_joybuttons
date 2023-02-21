@@ -111,6 +111,10 @@ class _JoyButtonsState extends State<JoyButtons> {
 
     _angleStep = 2 * math.pi / widget.buttonWidgets.length;
 
+    _updateCenterButtonOutput();
+  }
+
+  void _updateCenterButtonOutput() {
     if (widget.centerButtonOutput.isEmpty) {
       _centerButtonList = List.generate(widget.buttonWidgets.length, (index) => index);
     } else {
@@ -166,6 +170,7 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   Widget getButtons(List<Widget> buttonWidgets) {
     _angleStep = 2 * math.pi / widget.buttonWidgets.length;
+    _updateCenterButtonOutput();
     double heightOffset = widget.size.height / 4;
 
     List<Widget> widgets = [
