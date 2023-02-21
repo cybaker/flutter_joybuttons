@@ -18,7 +18,7 @@ class JoyButtonsExampleApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('JoyButtons Example'),
         ),
-        body: const MainPage(),
+        body: const JoyButtonsExample(),
       ),
     );
   }
@@ -57,21 +57,99 @@ class JoyButtonsExample extends StatefulWidget {
 }
 
 class _JoyButtonsExampleState extends State<JoyButtonsExample> {
+  List<int> _pressed = [];
+  double dimension = 60;
+
+  List<Widget> buttons = [
+    const JoyButtonsButton(
+      title: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ),
+    const JoyButtonsButton(
+      title: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ),
+    const JoyButtonsButton(
+      title: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ),
+    const JoyButtonsButton(
+      title: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ),
+    const JoyButtonsButton(
+      title: Padding(
+        padding: EdgeInsets.only(top: 16.0),
+        child: Text("EE", style: TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('JoyButtons'),
-      ),
       body: SafeArea(
-        child: Stack(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: dimension,
+                    height: dimension,
+                    color: _pressed.contains(0) ? Colors.green : Colors.transparent,
+                    child: const Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    width: dimension,
+                    height: dimension,
+                    color: _pressed.contains(1) ? Colors.green : Colors.transparent,
+                    child: const Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    width: dimension,
+                    height: dimension,
+                    color: _pressed.contains(2) ? Colors.green : Colors.transparent,
+                    child: const Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    width: dimension,
+                    height: dimension,
+                    color: _pressed.contains(3) ? Colors.green : Colors.transparent,
+                    child: const Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    width: dimension,
+                    height: dimension,
+                    color: _pressed.contains(4) ? Colors.green : Colors.transparent,
+                    child: const Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
+                  ),
+                ],
+              ),
+            ),
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
+                buttonWidgets: buttons,
                 listener: (details) {
                   setState(() {
+                    _pressed = details.pressed;
                     debugPrint("Buttons pressed are ${details.pressed}");
                   });
                 },
@@ -83,17 +161,3 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
     );
   }
 }
-
-List<Widget> buttons = [
-    const Positioned(
-      top: 40,
-      child: ElevatedButton(
-            onPressed: null,
-            child: Text("Up"),
-          ),
-    ),
-    const ElevatedButton(
-          onPressed: null,
-          child: Text("Down"),
-        ),
-  ];

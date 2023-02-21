@@ -18,7 +18,7 @@ class JoyButtons extends StatefulWidget {
 
   /// Widgets shown within bounds of JoyButtons.
   /// If empty, one circle widget is added.
-  final List<JoyButtonsButton> buttonWidgets;
+  final List<Widget> buttonWidgets;
 
   /// Buttons reported when the all button is pressed. Defaults to all [buttonWidgets] reported.
   final List<int> centerButtonOutput;
@@ -162,7 +162,7 @@ class _JoyButtonsState extends State<JoyButtons> {
     );
   }
 
-  Widget getButtons(List<JoyButtonsButton> buttonWidgets) {
+  Widget getButtons(List<Widget> buttonWidgets) {
     var divAngle = _angleStep;
     double heightOffset = widget.size.height / 4;
 
@@ -195,6 +195,7 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   void _dragEnd() {
     _callbackTimer?.cancel();
+    _pressed = [];
     widget.listener(TouchDragDetails(_pressed));
     widget.onTouchDragEnd?.call();
   }
