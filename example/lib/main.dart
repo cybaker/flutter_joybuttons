@@ -62,6 +62,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
 
   List<Widget> buttons = [
     const JoyButtonsButton(
+      widgetColor: Colors.amber,
       title: Padding(
         padding: EdgeInsets.only(top: 16.0),
         child: Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
@@ -74,6 +75,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
       ),
     ),
     const JoyButtonsButton(
+      widgetColor: Colors.lightGreen,
       title: Padding(
         padding: EdgeInsets.only(top: 16.0),
         child: Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
@@ -97,21 +99,21 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
                     alignment: Alignment.center,
                     width: dimension,
                     height: dimension,
-                    color: _pressed.contains(0) ? Colors.green : Colors.green.shade100,
+                    color: _pressed.contains(0) ? Colors.amber : Colors.grey.shade200,
                     child: const Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
                   ),
                   Container(
                     alignment: Alignment.center,
                     width: dimension,
                     height: dimension,
-                    color: _pressed.contains(1) ? Colors.green : Colors.green.shade100,
+                    color: _pressed.contains(1) ? Colors.blue : Colors.grey.shade200,
                     child: const Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
                   ),
                   Container(
                     alignment: Alignment.center,
                     width: dimension,
                     height: dimension,
-                    color: _pressed.contains(2) ? Colors.green : Colors.green.shade100,
+                    color: _pressed.contains(2) ? Colors.green : Colors.grey.shade200,
                     child: const Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
                   ),
                 ],
