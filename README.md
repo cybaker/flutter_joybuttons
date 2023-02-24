@@ -10,7 +10,7 @@
 Virtual JoyButtons for Flutter touchscreen apps. Inspired by programming Gravitar for smartphones and needing shield and bullets simultaneously.
 
 - [JoyButtons](#JoyButtons)
-- [Primary use cases](#Primary use cases)
+- [UseCases](#UseCases)
 - [Customization](#Customization)
 
 # JoyButtons:
@@ -21,11 +21,11 @@ There are any number of buttons outside a center button. Like a virtual joystick
 If the thumb is pressing over the center area, the reported presses are sent back to the listener. The center presses are customizable by the programmer.
 If the thumb is pressing in the JoyButtons outside the center area, then presses are reported for one or two adjacent buttons. This is also customizable.
 
-## Primary use cases:
+## UseCases:
 - activate one button, two buttons, or all buttons simultaneously with a single thumb or finger
 - press and hold and callback at regular intervals the pressed buttons
 
-Thanks to [![flutter_joystick](https://img.shields.io/github/license/cybaker/flutter_joystick)](https://github.com/cybaker/flutter_joystick)
+Thanks to [![flutter_joystick](https://img.shields.io/github/license/pavelzaichyk/flutter_joystick)](https://github.com/pavelzaichyk/flutter_joystick)
 for code inspiration. Gravitar also uses flutter_joystick.
 
 ### Customization
