@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -11,9 +10,6 @@ import 'joybuttons_controller.dart';
 class JoyButtons extends StatefulWidget {
   /// Callback, which is called with [period] frequency during dragging.
   final TouchDragCallback listener;
-
-  /// Frequency of calling [listener] from while dragging, by default 100 milliseconds.
-  final Duration period;
 
   /// Widgets shown within bounds of JoyButtons.
   /// If empty, one circle widget is added.
@@ -40,17 +36,10 @@ class JoyButtons extends StatefulWidget {
   /// Controller allows to control joyButtons events outside the widget.
   final JoyButtonsController? controller;
 
-  /// Callback, which is called when dragging starts.
-  final Function? onTouchDragStart;
-
-  /// Callback, which is called when dragging stops.
-  final Function? onTouchDragEnd;
-
   const JoyButtons({
     Key? key,
     required this.listener,
     this.size = const Size(200, 200),
-    this.period = const Duration(milliseconds: 100),
     this.base = const JoyButtonsBase(
       size: Size(200, 200),
     ),
@@ -79,8 +68,6 @@ class JoyButtons extends StatefulWidget {
     this.centerButtonScale = 0.4,
     this.simultaneousOverlapScale = 0.4,
     this.controller,
-    this.onTouchDragStart,
-    this.onTouchDragEnd,
   }) : super(key: key);
 
   @override
@@ -97,7 +84,6 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   late List<int> _centerButtonList;
 
-  Timer? _callbackTimer;
   List<int> _pressed = [];
 
   @override
@@ -189,11 +175,9 @@ class _JoyButtonsState extends State<JoyButtons> {
   }
 
   void _dragStart(Offset touchPosition) {
-    _runCallback();
     var offsetFromCenter = touchPosition - _center;
     _pressed = _calculatePressedButtons(offsetFromCenter);
     widget.listener(TouchDragActivated(_pressed));
-    widget.onTouchDragStart?.call();
   }
 
   void _dragUpdate(Offset touchPosition) {
@@ -203,16 +187,8 @@ class _JoyButtonsState extends State<JoyButtons> {
   }
 
   void _dragEnd() {
-    _callbackTimer?.cancel();
     _pressed = [];
     widget.listener(TouchDragActivated(_pressed));
-    widget.onTouchDragEnd?.call();
-  }
-
-  void _runCallback() {
-    _callbackTimer = Timer.periodic(widget.period, (timer) {
-      widget.listener(TouchDragActivated(_pressed));
-    });
   }
 
   List<int> _calculatePressedButtons(Offset offsetFromCenter) {
@@ -242,12 +218,6 @@ class _JoyButtonsState extends State<JoyButtons> {
     }
 
     return pressed;
-  }
-
-  @override
-  void dispose() {
-    _callbackTimer?.cancel();
-    super.dispose();
   }
 }
 
