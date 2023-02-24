@@ -35,7 +35,8 @@ class MainPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const JoyButtonsExample()),
+                MaterialPageRoute(
+                    builder: (context) => const JoyButtonsExample()),
               );
             },
             child: const Text('JoyButtons'),
@@ -72,12 +73,13 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
 
   JoyButtonsButton testButton(String label, MaterialColor color) {
     return JoyButtonsButton(
-    widgetColor: color,
-    title: Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 32)),
-    ),
-  );
+      widgetColor: color,
+      title: Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Text(label,
+            style: const TextStyle(color: Colors.white, fontSize: 32)),
+      ),
+    );
   }
 
   List<Widget> getContainers(int number) {
@@ -98,7 +100,8 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
       width: dimension,
       height: dimension,
       color: _pressed.contains(index) ? color : Colors.grey.shade200,
-      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 32)),
+      child: Text(label,
+          style: const TextStyle(color: Colors.white, fontSize: 32)),
     );
   }
 
@@ -109,7 +112,8 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text("Change the number of Buttons", style: const TextStyle(fontSize: 24)),
+            const Text("Change the number of Buttons",
+                style: const TextStyle(fontSize: 24)),
             Slider(
               min: 1.0,
               max: 6.0,
@@ -131,12 +135,16 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
                 ],
               ),
             ),
-            const Text("Touch inside the circle to see which buttons are pressed", style: const TextStyle(fontSize: 24)),
+            const Text(
+                "Touch inside the circle to see which buttons are pressed",
+                style: const TextStyle(fontSize: 24)),
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
-                centerButtonOutput: List.generate(_numberOfButtons.round(), (index) => index),
-                buttonWidgets: getButtons().take(_numberOfButtons.round()).toList(),
+                centerButtonOutput:
+                    List.generate(_numberOfButtons.round(), (index) => index),
+                buttonWidgets:
+                    getButtons().take(_numberOfButtons.round()).toList(),
                 listener: (details) {
                   setState(() {
                     _pressed = details.pressed;

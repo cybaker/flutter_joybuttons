@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class JoyButtonsBase extends StatelessWidget {
-
   /// Size of the JoyButton base
   final Size size;
 
@@ -27,7 +26,6 @@ class JoyButtonsBase extends StatelessWidget {
 }
 
 class _JoyButtonsBasePainter extends CustomPainter {
-
   final _borderPaint = Paint()
     ..color = Colors.grey.shade300
     ..style = PaintingStyle.fill;

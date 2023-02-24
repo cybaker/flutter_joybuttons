@@ -90,8 +90,10 @@ class _JoyButtonsState extends State<JoyButtons> {
   @override
   void initState() {
     super.initState();
-    widget.controller?.onTouchDragStart = (globalPosition) => _dragStart(globalPosition);
-    widget.controller?.onTouchDragUpdate = (globalPosition) => _dragUpdate(globalPosition);
+    widget.controller?.onTouchDragStart =
+        (globalPosition) => _dragStart(globalPosition);
+    widget.controller?.onTouchDragUpdate =
+        (globalPosition) => _dragUpdate(globalPosition);
     widget.controller?.onTouchDragEnd = () => _dragEnd();
 
     _center = Offset(widget.size.width / 2, widget.size.height / 2);
@@ -103,7 +105,8 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   void _updateCenterButtonOutput() {
     if (widget.centerButtonOutput.isEmpty) {
-      _centerButtonList = List.generate(widget.buttonWidgets.length, (index) => index);
+      _centerButtonList =
+          List.generate(widget.buttonWidgets.length, (index) => index);
     } else {
       _centerButtonList = widget.centerButtonOutput;
     }
@@ -168,7 +171,8 @@ class _JoyButtonsState extends State<JoyButtons> {
   List<int> _calculatePressedButtons(Offset offsetFromCenter) {
     List<int> pressed = [];
 
-    if (offsetFromCenter.distance < (widget.centerWidget as JoyButtonsCenter).size.width / 2) {
+    if (offsetFromCenter.distance <
+        (widget.centerWidget as JoyButtonsCenter).size.width / 2) {
       // Center button pressed
       pressed = _centerButtonList;
     } else {
@@ -185,7 +189,8 @@ class _JoyButtonsState extends State<JoyButtons> {
         if (deltaAngle > math.pi) {
           deltaAngle = 2 * math.pi - deltaAngle;
         }
-        if (deltaAngle.abs() < ((1 + widget.simultaneousOverlapScale) * _angleStep / 2)) {
+        if (deltaAngle.abs() <
+            ((1 + widget.simultaneousOverlapScale) * _angleStep / 2)) {
           pressed.add(index);
         }
       });
