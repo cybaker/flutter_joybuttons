@@ -64,10 +64,10 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
     return [
       testButton("A", Colors.amber),
       testButton("B", Colors.blue),
-      testButton("C", Colors.amber),
+      testButton("C", Colors.pink),
       testButton("D", Colors.green),
-      testButton("E", Colors.yellow),
-      testButton("F", Colors.red),
+      testButton("E", Colors.red),
+      testButton("F", Colors.lime),
     ];
   }
 
@@ -86,10 +86,10 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
     List<Widget> all = [
       testIndicator("A", 0, Colors.amber),
       testIndicator("B", 1, Colors.blue),
-      testIndicator("C", 2, Colors.amber),
+      testIndicator("C", 2, Colors.pink),
       testIndicator("D", 3, Colors.green),
-      testIndicator("E", 4, Colors.yellow),
-      testIndicator("F", 5, Colors.red),
+      testIndicator("E", 4, Colors.red),
+      testIndicator("F", 5, Colors.lime),
     ];
     return all.take(number).toList();
   }
