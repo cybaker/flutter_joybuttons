@@ -23,12 +23,17 @@ There are any number of buttons outside a center button. Like a virtual joystick
 If the thumb is pressing over the center area, the reported presses are sent back to the listener. The center presses are customizable by the programmer.
 If the thumb is pressing in the JoyButtons outside the center area, then presses are reported for one or two adjacent buttons. This is also customizable.
 
+<img width="211" alt="default buttons" src="https://user-images.githubusercontent.com/1371616/221273861-4e8e4d1b-33ac-4016-be9e-9f572db456d7.png">
+<img width="208" alt="5 buttons" src="https://user-images.githubusercontent.com/1371616/221273887-a37d0d34-2ac3-4d4e-b23e-df9fc9993709.png">
+<img width="207" alt="2 buttons" src="https://user-images.githubusercontent.com/1371616/221273905-c74caec4-6e09-479d-961f-6a82be200e70.png">
+
+
 # UseCases:
 - activate one button, two buttons, or all buttons simultaneously with a single thumb or finger
 - press and hold and callback at regular intervals the pressed buttons
 
 Shoutout to [flutter_joystick](https://github.com/pavelzaichyk/flutter_joystick)
-for code inspiration. [Gravitar](https://github.com/cybaker/Gravitar) also uses flutter_joystick for mobile.
+for usage and code inspiration. [Gravitar](https://github.com/cybaker/Gravitar) also uses flutter_joystick for mobile.
 
 # Customization
 
@@ -42,10 +47,8 @@ center button will activate all buttons. You can define which buttons are report
 
 Between the outer buttons, the area between buttons that allows multiple button activation is customizeable by simultaneousOverlapScale. A value of 0.0 means no overlap area so only single buttons are activated while pressing in the outer area. A value of 1.0 means that the overlap is 100% into the adjacent buttons, so there are always multiple activations while pressing in the outer area. The default value is 0.4.
 
-Center button scale is the size of the center 
-
 ## API Customizations
 - buttonWidgets: the List<Widget> defining each button. Button widget can be custom - background color, shape, size, and text, any Flutter UI widget.
-- simultaneousOverlapScale from 0.0 (alone) to 1.0 (always with an adjacent) or alone and with an adjacent (default of about 0.4)
-- centerButtonScale: from 0.0 to 1.0, the relative size of the center circle defining the center press area. 1.0 covers all the buttons.
+- simultaneousOverlapScale from 0.0 (alone) to 1.0 (always with an adjacent) or alone and with an adjacent (default of about 0.4).
+- centerButton: a Widget for the center button.
 - centerButtonOutput: List<int> defines what to report when the center button is pressed. The integers represent the position of buttonWidgets pressed.
