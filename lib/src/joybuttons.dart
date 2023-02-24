@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_joybuttons/flutter_joybuttons.dart';
 import 'package:flutter_joybuttons/src/joybuttons_button.dart';
 
 import 'joybuttons_base.dart';
@@ -19,7 +20,7 @@ class JoyButtons extends StatefulWidget {
   final List<int> centerButtonOutput;
 
   /// Center button scale relative to total Widget size. 1.0 is full size, 0.0 is zero size. Defalut is 0.4.
-  final double centerButtonScale;
+  final Widget centerWidget;
 
   /// Overlap on both sides of a button's tap region, from 0.0 to 1.0. This adds to the tappable region for all
   /// outside buttons, not the center button. This allows adjacent buttons to be pressed simultaneously.
@@ -65,7 +66,7 @@ class JoyButtons extends StatefulWidget {
       ),
     ],
     this.centerButtonOutput = const [],
-    this.centerButtonScale = 0.4,
+    this.centerWidget = const JoyButtonsCenter(widgetColor: Colors.deepPurple),
     this.simultaneousOverlapScale = 0.4,
     this.controller,
   }) : super(key: key);
@@ -122,35 +123,8 @@ class _JoyButtonsState extends State<JoyButtons> {
             child: widget.base,
           ),
           getButtons(widget.buttonWidgets),
-          centerWidget(),
+          widget.centerWidget,
         ],
-      ),
-    );
-  }
-
-  Container centerWidget() {
-    return Container(
-      key: const Key("joybuttons_center"),
-      width: widget.size.width * widget.centerButtonScale,
-      height: widget.size.height * widget.centerButtonScale,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 4),
-          )
-        ],
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.lightBlue.shade400,
-            Colors.lightBlue.shade900,
-          ],
-        ),
       ),
     );
   }
@@ -194,7 +168,7 @@ class _JoyButtonsState extends State<JoyButtons> {
   List<int> _calculatePressedButtons(Offset offsetFromCenter) {
     List<int> pressed = [];
 
-    if (offsetFromCenter.distance < widget.centerButtonScale * widget.size.width / 2) {
+    if (offsetFromCenter.distance < (widget.centerWidget as JoyButtonsCenter).size.width / 2) {
       // Center button pressed
       pressed = _centerButtonList;
     } else {
