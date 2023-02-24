@@ -2,9 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_joybuttons/flutter_joybuttons.dart';
-import 'package:flutter_joybuttons/src/joybuttons_button.dart';
 
-import 'joybuttons_base.dart';
 import 'joybuttons_controller.dart';
 
 /// JoyButtons widget
@@ -72,10 +70,10 @@ class JoyButtons extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _JoyButtonsState createState() => _JoyButtonsState();
+  JoyButtonsState createState() => JoyButtonsState();
 }
 
-class _JoyButtonsState extends State<JoyButtons> {
+class JoyButtonsState extends State<JoyButtons> {
   final GlobalKey _baseKey = GlobalKey();
 
   late Offset _center;

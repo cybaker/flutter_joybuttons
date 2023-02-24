@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Joybuttons press test', (WidgetTester tester) async {
-    var _pressed = <int>[];
+    var pressed = <int>[];
 
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -19,7 +19,7 @@ void main() {
           title: const Text('JoyButtons Example'),
         ),
         body: JoyButtons(listener: (details) {
-          _pressed = details.pressed;
+          pressed = details.pressed;
         }),
       ),
     ));
@@ -31,44 +31,44 @@ void main() {
 
     var gesture = await tester.startGesture(offsetA);
     await tester.pump();
-    expect(_pressed, equals([0]));
+    expect(pressed, equals([0]));
 
     await gesture.moveTo((offsetA + offsetB) / 2);
     await tester.pump();
-    expect(_pressed, equals([0, 1]));
+    expect(pressed, equals([0, 1]));
 
     await gesture.moveTo(offsetB);
     await tester.pump();
-    expect(_pressed, equals([1]));
+    expect(pressed, equals([1]));
 
     await gesture.moveTo((offsetB + offsetC) / 2);
     await tester.pump();
-    expect(_pressed, equals([1, 2]));
+    expect(pressed, equals([1, 2]));
 
     await gesture.moveTo(offsetC);
     await tester.pump();
-    expect(_pressed, equals([2]));
+    expect(pressed, equals([2]));
 
     await gesture.moveTo((offsetC + offsetD) / 2);
     await tester.pump();
-    expect(_pressed, equals([2, 3]));
+    expect(pressed, equals([2, 3]));
 
     await gesture.moveTo(offsetD);
     await tester.pump();
-    expect(_pressed, equals([3]));
+    expect(pressed, equals([3]));
 
     await gesture.moveTo((offsetA + offsetD) / 2);
     await tester.pump();
-    expect(_pressed, equals([0, 3]));
+    expect(pressed, equals([0, 3]));
 
     final Offset center =
         tester.getCenter(find.byKey(const Key("joybuttons_center")));
     await gesture.moveTo(center);
     await tester.pump();
-    expect(_pressed, equals([0, 1, 2, 3]));
+    expect(pressed, equals([0, 1, 2, 3]));
 
     await gesture.cancel();
     await tester.pump();
-    expect(_pressed, equals([]));
+    expect(pressed, equals([]));
   });
 }
