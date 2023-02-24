@@ -144,6 +144,7 @@ class _JoyButtonsState extends State<JoyButtons> {
 
   Container centerWidget() {
     return Container(
+      key: const Key("joybuttons_center"),
       width: widget.size.width * widget.centerButtonScale,
       height: widget.size.height * widget.centerButtonScale,
       decoration: BoxDecoration(
@@ -191,12 +192,14 @@ class _JoyButtonsState extends State<JoyButtons> {
     _runCallback();
     var offsetFromCenter = touchPosition - _center;
     _pressed = _calculatePressedButtons(offsetFromCenter);
+    widget.listener(TouchDragActivated(_pressed));
     widget.onTouchDragStart?.call();
   }
 
   void _dragUpdate(Offset touchPosition) {
     var offsetFromCenter = touchPosition - _center;
     _pressed = _calculatePressedButtons(offsetFromCenter);
+    widget.listener(TouchDragActivated(_pressed));
   }
 
   void _dragEnd() {
