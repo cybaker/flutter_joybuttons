@@ -55,86 +55,51 @@ class JoyButtonsExample extends StatefulWidget {
 
 class _JoyButtonsExampleState extends State<JoyButtonsExample> {
   List<int> _pressed = [];
-  double dimension = 60;
+  double dimension = 45;
 
   double _numberOfButtons = 3;
 
-  List<Widget> buttons = [
-    const JoyButtonsButton(
-      widgetColor: Colors.amber,
-      title: Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
+  List<Widget> getButtons() {
+    return [
+      testButton("A", Colors.amber),
+      testButton("B", Colors.blue),
+      testButton("C", Colors.amber),
+      testButton("D", Colors.green),
+      testButton("E", Colors.yellow),
+      testButton("F", Colors.red),
+    ];
+  }
+
+  JoyButtonsButton testButton(String label, MaterialColor color) {
+    return JoyButtonsButton(
+    widgetColor: color,
+    title: Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 32)),
     ),
-    const JoyButtonsButton(
-      title: Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-    ),
-    const JoyButtonsButton(
-      widgetColor: Colors.green,
-      title: Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-    ),
-    const JoyButtonsButton(
-      widgetColor: Colors.red,
-      title: Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-    ),
-    const JoyButtonsButton(
-      widgetColor: Colors.yellow,
-      title: Padding(
-        padding: EdgeInsets.only(top: 16.0),
-        child: Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-    ),
-  ];
+  );
+  }
 
   List<Widget> getContainers(int number) {
     List<Widget> all = [
-      Container(
-        alignment: Alignment.center,
-        width: dimension,
-        height: dimension,
-        color: _pressed.contains(0) ? Colors.amber : Colors.grey.shade200,
-        child: const Text("A", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-      Container(
-        alignment: Alignment.center,
-        width: dimension,
-        height: dimension,
-        color: _pressed.contains(1) ? Colors.blue : Colors.grey.shade200,
-        child: const Text("B", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-      Container(
-        alignment: Alignment.center,
-        width: dimension,
-        height: dimension,
-        color: _pressed.contains(2) ? Colors.green : Colors.grey.shade200,
-        child: const Text("C", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-      Container(
-        alignment: Alignment.center,
-        width: dimension,
-        height: dimension,
-        color: _pressed.contains(3) ? Colors.redAccent : Colors.grey.shade200,
-        child: const Text("D", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
-      Container(
-        alignment: Alignment.center,
-        width: dimension,
-        height: dimension,
-        color: _pressed.contains(4) ? Colors.yellow : Colors.grey.shade200,
-        child: const Text("E", style: TextStyle(color: Colors.white, fontSize: 32)),
-      ),
+      testIndicator("A", 0, Colors.amber),
+      testIndicator("B", 1, Colors.blue),
+      testIndicator("C", 2, Colors.amber),
+      testIndicator("D", 3, Colors.green),
+      testIndicator("E", 4, Colors.yellow),
+      testIndicator("F", 5, Colors.red),
     ];
     return all.take(number).toList();
+  }
+
+  Container testIndicator(String label, int index, Color color) {
+    return Container(
+      alignment: Alignment.center,
+      width: dimension,
+      height: dimension,
+      color: _pressed.contains(index) ? color : Colors.grey.shade200,
+      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 32)),
+    );
   }
 
   @override
@@ -147,9 +112,9 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
             const Text("Slide to change the number of Buttons"),
             Slider(
               min: 1.0,
-              max: 5.0,
+              max: 6.0,
               value: _numberOfButtons,
-              divisions: 4,
+              divisions: 5,
               label: '${_numberOfButtons.round()}',
               onChanged: (value) {
                 setState(() {
@@ -171,7 +136,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
                 centerButtonOutput: List.generate(_numberOfButtons.round(), (index) => index),
-                buttonWidgets: buttons.take(_numberOfButtons.round()).toList(),
+                buttonWidgets: getButtons().take(_numberOfButtons.round()).toList(),
                 listener: (details) {
                   setState(() {
                     _pressed = details.pressed;
