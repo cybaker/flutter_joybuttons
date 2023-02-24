@@ -1,0 +1,23 @@
+name: flutter_joybuttons
+description: Virtual buttons for Flutter touchscreen applications. Flexible and customizable.
+version: 0.0.1
+homepage: https://github.com/cybaker/flutter_joybuttons
+repository: https://github.com/pavelzaichyk/flutter_joybuttons
+funding:
+  - https://paypal.me/pavelzaichyk
+  - https://buymeacoffee.com/rebeloid
+  - https://paypal.com/donate/?hosted_button_id=EG9DHRCSB5MY4
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.4
+
+flutter:

@@ -7,86 +7,39 @@
 [![Pub points](https://badgen.net/pub/points/flutter_joybuttons)](https://pub.dev/packages/flutter_joybuttons/score)
 [![Flutter platform](https://badgen.net/pub/flutter-platform/flutter_joybuttons)](https://pub.dev/packages/flutter_joybuttons)
 
-A virtual JoyButtons for Flutter applications. Inspired by Gravitar for mobile. 
+Virtual JoyButtons for Flutter touchscreen apps. Inspired by programming Gravitar for smartphones and needing shield and bullets simultaneously.
 
-JoyButtons are a variant of virtual Joysticks. Tapping multiple buttons simultaneously on a touchscreen with one thumb is impossible. Multiple fingers are possible, but holding a phone and using a thumb for a joystick and fingers for multiple buttons is near impossible. This Widget solves some of those multiple button simultaneous tap use cases.
+- [JoyButtons](#JoyButtons)
+- [Primary use cases](#Primary use cases)
+- [Customization](#Customization)
 
-## Use cases:
-- activate one button, two buttons, or all buttons simultaneously
-- press and hold to continuously callback which buttons are pressed
+# JoyButtons:
+Virtual JoyButtons are one way to press multiple buttons simultaneously. Physical game controllers allow simultaneous presses by different fingers. A touchscreen device is limited to front facing touchscreens which make simultaneous button pressing a real challenge.
+
+Thus, JoyButtons are here. The user uses one thumb and can active multiple buttons simultaneously, just not in all possible combinations.
+There are any number of buttons outside a center button. Like a virtual joystick, the user can move their thumb around the two dimensions.
+If the thumb is pressing over the center area, the reported presses are sent back to the listener. The center presses are customizable by the programmer.
+If the thumb is pressing in the JoyButtons outside the center area, then presses are reported for one or two adjacent buttons. This is also customizable.
+
+## Primary use cases:
+- activate one button, two buttons, or all buttons simultaneously with a single thumb or finger
+- press and hold and callback at regular intervals the pressed buttons
 
 Thanks to [![flutter_joystick](https://img.shields.io/github/license/cybaker/flutter_joystick)](https://github.com/cybaker/flutter_joystick)
-for code inspiration.
-
-- [JoyButtons](#joyButtons)
-- [JoyButtons Area](#joyButtons-area)
-- [Customization](#customization) 
-- [Donate](#donate)
-
-
-### JoyButtons
-
-![JoyButtons](TODO "JoyButtons")
-
-```dart
-JoyButtons(listener: (details) {
-...
-})
-```
-
-`JoyButtons` arguments:
-
-Parameter | Description
---- | --- 
-listener | callback, which is called with `period` frequency when the stick is dragged. Listener parameter `details` contains the stick offset from the center of the base (can be from -1.0 to +1.0).
-period | frequency of calling `listener` from the moment the stick is dragged, by default 100 milliseconds.
-mode | possible directions mode of the joyButtons stick, by default `all`
-
-Possible joyButtons modes:
-
-Mode | Description
---- | --- 
-all | allow move the stick in any direction: vertical, horizontal and diagonal
-vertical | allow move the stick only in vertical direction
-horizontal | allow move the stick only in horizontal direction
-horizontalAndVertical | allow move the stick only in horizontal and vertical directions, not diagonal
-
-![JoyButtons Vertical](https://i.giphy.com/media/FXQG3ttV35Ca5L5ZA7/giphy.gif "JoyButtons Vertical")
-![JoyButtons Horizontal](https://i.giphy.com/media/SN9YMtBKaHLkw5iIvB/giphy.gif "JoyButtons Horizontal")
-![JoyButtons Horizontal And Vertical](https://i.giphy.com/media/znAdOQr52MmKTssc91/giphy.gif "JoyButtons Horizontal And Vertical")
-
-### JoyButtons Area
-
-![JoyButtons](https://i.giphy.com/media/2uFUWJcOaaTPFbIFBd/giphy.gif "JoyButtons Area")
-
-`JoyButtonsArea` allows to render a joyButtons anywhere in this area where user clicks.
-
-```dart
-JoyButtonsArea(
-  listener: (details) {
-    ...
-  },
-  child: ...
-)
-```
-
-`JoyButtonsArea` has the same arguments as `JoyButtons` (listener, period, mode, etc.).
-
-Additional `JoyButtonsArea` arguments:
-
-Parameter | Description
---- | ---
-initialJoyButtonsAlignment | Initial joyButtons alignment relative to the joyButtons area, by default `Alignment.bottomCenter`.
-child | The `child` contained by the joyButtons area.
+for code inspiration. Gravitar also uses flutter_joystick.
 
 ### Customization
 
-![Square JoyButtons](https://i.giphy.com/media/kjGJmILAeBJFXGtcgt/giphy.gif "Square JoyButtons")
+There are a minimum of 2 buttons needed to define and setup. There can be a large amount of buttons defined. Just note the more
+buttons there are, the less angular difference between buttons. 2 to 5 buttons seem reasonable.
 
-`JoyButtons` and `JoyButtonsArea` have additional arguments that allow to customize their appearance and behaviour.
+The example shows 3 buttons setup. The center area report all 3 buttons when pressed. The outer buttons
+can activate simultaneously with an adjacent button or alone. In the example, pressing
+the outer area and sweeping around 360 degrees will activate 1 or 2 buttons simultaneously, while moving to the 
+center button will activate all 3 buttons.
 
-Parameter | Description
---- | ---
-base | Widget that renders joyButtons base, by default `JoyButtonsBase`.
-stick | Widget that renders joyButtons stick, it places in the center of `base` widget, by default `JoyButtonsStick`.
-stickOffsetCalculator | Calculate offset of the stick based on the stick drag start position and the current stick position. The package currently only supports circle and rectangle joyButtons shapes. By default `CircleStickOffsetCalculator`.
+Customizations
+Number of outer buttons.
+Button background color, shape, size, and text.
+Center button color and scale.
+simultaneousOverlapScale from 0.0 (alone) to 1.0 (always with an adjacent) or alone and with an adjacent (default of about 0.4)
