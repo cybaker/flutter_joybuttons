@@ -109,7 +109,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text("Slide to change the number of Buttons"),
+            const Text("Change the number of Buttons", style: const TextStyle(fontSize: 24)),
             Slider(
               min: 1.0,
               max: 6.0,
@@ -131,7 +131,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
                 ],
               ),
             ),
-            const Text("Touch inside the circle to see which buttons are pressed"),
+            const Text("Touch inside the circle to see which buttons are pressed", style: const TextStyle(fontSize: 24)),
             Align(
               alignment: const Alignment(0, 0.8),
               child: JoyButtons(
