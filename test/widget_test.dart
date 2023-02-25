@@ -88,7 +88,7 @@ void main() {
     ));
 
     final Offset center = tester.getCenter(find.byKey(const Key("joybuttons_center")));
-    var gesture = await tester.startGesture(center);
+    await tester.startGesture(center);
     await tester.pump();
     expect(pressed, equals([99]));
   });
