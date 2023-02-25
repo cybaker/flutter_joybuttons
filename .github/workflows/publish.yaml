@@ -12,24 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
       - uses: actions/checkout@v3
-
-      - name: Install Flutter
       - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
-
-      - name: Install dependencies
+          channel: beta
       - run: flutter pub get
-
-      - name: Run unit tests
       - run: flutter test
-
-      - name: Publish example web pages
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
-          baseHref: /flutter_joybuttons/
+          baseHref: /flutter_joybuttons/example/
           workingDir: example
 
   publish:
