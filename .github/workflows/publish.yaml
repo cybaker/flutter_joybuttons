@@ -33,6 +33,10 @@ jobs:
           workingDir: example
 
       - name: Update pub.dev release
-      - publish:
-        # For pub.dev publishing.
-        uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+
+  publish:
+    name: Publish to pub.dev
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
