@@ -31,6 +31,3 @@ jobs:
         with:
           baseHref: /flutter_joybuttons/
           workingDir: example
-
-      - name: Publish to pub.dev
-      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1

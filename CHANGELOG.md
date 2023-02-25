@@ -1,3 +1,7 @@
-## 0.0.1
+## 1.0.1
 
-* Added JoyButtons and JoyButtonsArea widgets.
+* Updated example colors.
+
+* ## 1.0.0
+
+* Added JoyButtons widgets.
