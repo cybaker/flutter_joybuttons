@@ -3,8 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_joybuttons/flutter_joybuttons.dart';
 
-import 'joybuttons_controller.dart';
-
 /// JoyButtons widget
 class JoyButtons extends StatefulWidget {
   /// Callback, which is called with [period] frequency during dragging.
@@ -31,9 +29,6 @@ class JoyButtons extends StatefulWidget {
 
   /// Widget that renders joyButtons base, by default [JoyButtonsBase].
   final Widget base;
-
-  /// Controller allows to control joyButtons events outside the widget.
-  final JoyButtonsController? controller;
 
   const JoyButtons({
     Key? key,
@@ -66,7 +61,6 @@ class JoyButtons extends StatefulWidget {
     this.centerButtonOutput = const [],
     this.centerWidget = const JoyButtonsCenter(widgetColor: Colors.deepPurple),
     this.simultaneousOverlapScale = 0.4,
-    this.controller,
   }) : super(key: key);
 
   @override
@@ -88,12 +82,6 @@ class JoyButtonsState extends State<JoyButtons> {
   @override
   void initState() {
     super.initState();
-    widget.controller?.onTouchDragStart =
-        (globalPosition) => _dragStart(globalPosition);
-    widget.controller?.onTouchDragUpdate =
-        (globalPosition) => _dragUpdate(globalPosition);
-    widget.controller?.onTouchDragEnd = () => _dragEnd();
-
     _center = Offset(widget.size.width / 2, widget.size.height / 2);
 
     _angleStep = 2 * math.pi / widget.buttonWidgets.length;
