@@ -27,5 +27,4 @@ jobs:
     name: Publish to pub.dev
     needs: [build]
     runs-on: ubuntu-latest
-    steps:
-      - uses: dart-lang/setup-dart/.github/workflows/publish.yml@main
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@main
