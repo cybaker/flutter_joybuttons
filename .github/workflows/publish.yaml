@@ -12,17 +12,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Flutter
       - uses: subosito/flutter-action@v2
         with:
-          channel: beta
+          channel: 'stable'
+
+      - name: Install dependencies
       - run: flutter pub get
+
+      - name: Run unit tests
       - run: flutter test
+
+      - name: Publish example web pages
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           baseHref: /flutter_joybuttons/
           workingDir: example
 
-  publish:
-    # For pub.dev publishing.
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+      - name: Update pub.dev release
+      - publish:
+        # For pub.dev publishing.
+        uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
