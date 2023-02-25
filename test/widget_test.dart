@@ -61,8 +61,7 @@ void main() {
     await tester.pump();
     expect(pressed, equals([0, 3]));
 
-    final Offset center =
-        tester.getCenter(find.byKey(const Key("joybuttons_center")));
+    final Offset center = tester.getCenter(find.byKey(const Key("joybuttons_center")));
     await gesture.moveTo(center);
     await tester.pump();
     expect(pressed, equals([0, 1, 2, 3]));
@@ -70,5 +69,27 @@ void main() {
     await gesture.cancel();
     await tester.pump();
     expect(pressed, equals([]));
+  });
+
+  testWidgets('Joybuttons centerButtonOutput', (WidgetTester tester) async {
+    var pressed = <int>[];
+
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('JoyButtons Example'),
+        ),
+        body: JoyButtons(
+            centerButtonOutput: const [99],
+            listener: (details) {
+              pressed = details.pressed;
+            }),
+      ),
+    ));
+
+    final Offset center = tester.getCenter(find.byKey(const Key("joybuttons_center")));
+    var gesture = await tester.startGesture(center);
+    await tester.pump();
+    expect(pressed, equals([99]));
   });
 }
