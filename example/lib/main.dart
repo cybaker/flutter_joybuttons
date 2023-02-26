@@ -30,7 +30,7 @@ class JoyButtonsExample extends StatefulWidget {
 
 class _JoyButtonsExampleState extends State<JoyButtonsExample> {
   List<int> _pressed = [];
-  double dimension = 45;
+  double dimension = 22;
 
   double _sizeOfCenter = 0.4;
   double _numberOfButtons = 3;
@@ -78,7 +78,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
       width: dimension,
       height: dimension,
       color: _pressed.contains(index) ? color : Colors.grey.shade200,
-      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 32)),
+      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 16)),
     );
   }
 
@@ -86,86 +86,90 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text("Number of Buttons", style: TextStyle(fontSize: 24)),
-                ),
-                Slider(
-                  min: 1.0,
-                  max: _maxButtons,
-                  value: _numberOfButtons,
-                  divisions: (_maxButtons - 1.0).round(),
-                  label: '${_numberOfButtons.round()}',
-                  onChanged: (value) {
-                    setState(() {
-                      _numberOfButtons = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text("Size of center", style: TextStyle(fontSize: 24)),
-                ),
-                Slider(
-                  min: 0.0,
-                  max: 1.0,
-                  value: _sizeOfCenter,
-                  divisions: 20,
-                  label: _sizeOfCenter.toString(),
-                  onChanged: (value) {
-                    setState(() {
-                      _sizeOfCenter = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text("Pressed buttons", style: TextStyle(fontSize: 24)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Wrap(
-                    alignment: WrapAlignment.spaceAround,
-                    children: [
-                      ...getIndicators(_numberOfButtons.round()),
-                    ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text("Number of Buttons", style: TextStyle(fontSize: 24)),
                   ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text("Touch joybuttons widget to see which buttons are reported as pressed",
-                      style: TextStyle(fontSize: 24)),
-                ),
-                JoyButtons(
-                  centerButtonOutput: List.generate(_numberOfButtons.round(), (index) => index),
-                  centerWidget: JoyButtonsCenter(size: Size(200*_sizeOfCenter, 200*_sizeOfCenter),),
-                  buttonWidgets: getButtons(),
-                  listener: (details) {
-                    setState(() {
-                      _pressed = details.pressed;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ],
+                  Slider(
+                    min: 1.0,
+                    max: _maxButtons,
+                    value: _numberOfButtons,
+                    divisions: (_maxButtons - 1.0).round(),
+                    label: '${_numberOfButtons.round()}',
+                    onChanged: (value) {
+                      setState(() {
+                        _numberOfButtons = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text("Size of center", style: TextStyle(fontSize: 24)),
+                  ),
+                  Slider(
+                    min: 0.0,
+                    max: 1.0,
+                    value: _sizeOfCenter,
+                    divisions: 20,
+                    label: _sizeOfCenter.toString(),
+                    onChanged: (value) {
+                      setState(() {
+                        _sizeOfCenter = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text("Pressed buttons", style: TextStyle(fontSize: 24)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceAround,
+                      children: [
+                        ...getIndicators(_numberOfButtons.round()),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text("Touch joybuttons widget to see which buttons are reported as pressed",
+                        style: TextStyle(fontSize: 24)),
+                  ),
+                  JoyButtons(
+                    centerButtonOutput: List.generate(_numberOfButtons.round(), (index) => index),
+                    centerWidget: JoyButtonsCenter(
+                      size: Size(200 * _sizeOfCenter, 200 * _sizeOfCenter),
+                    ),
+                    buttonWidgets: getButtons(),
+                    listener: (details) {
+                      setState(() {
+                        _pressed = details.pressed;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
