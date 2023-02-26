@@ -61,7 +61,7 @@ void main() {
     await tester.pump();
     expect(pressed, equals([0, 3]));
 
-    final Offset center = tester.getCenter(find.byKey(const Key("joybuttons_center")));
+    final Offset center = tester.getCenter(find.byKey(const Key(JoyButtonsCenter.joyButtonsCenterKey)));
     await gesture.moveTo(center);
     await tester.pump();
     expect(pressed, equals([0, 1, 2, 3]));
