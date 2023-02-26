@@ -32,6 +32,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
   List<int> _pressed = [];
   double dimension = 45;
 
+  double _sizeOfCenter = 0.4;
   double _numberOfButtons = 3;
   final double _maxButtons = 50;
 
@@ -112,6 +113,26 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
               children: [
                 const Padding(
                   padding: EdgeInsets.all(16.0),
+                  child: Text("Size of center", style: TextStyle(fontSize: 24)),
+                ),
+                Slider(
+                  min: 0.0,
+                  max: 1.0,
+                  value: _sizeOfCenter,
+                  divisions: 20,
+                  label: _sizeOfCenter.toString(),
+                  onChanged: (value) {
+                    setState(() {
+                      _sizeOfCenter = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
                   child: Text("Pressed buttons", style: TextStyle(fontSize: 24)),
                 ),
                 Padding(
@@ -134,6 +155,7 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
                 ),
                 JoyButtons(
                   centerButtonOutput: List.generate(_numberOfButtons.round(), (index) => index),
+                  centerWidget: JoyButtonsCenter(size: Size(200*_sizeOfCenter, 200*_sizeOfCenter),),
                   buttonWidgets: getButtons(),
                   listener: (details) {
                     setState(() {
