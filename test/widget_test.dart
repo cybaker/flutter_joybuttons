@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_joybuttons/src/joybuttons.dart';
+import 'package:flutter_joybuttons/flutter_joybuttons.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -61,7 +61,7 @@ void main() {
     await tester.pump();
     expect(pressed, equals([0, 3]));
 
-    final Offset center = tester.getCenter(find.byKey(const Key("joybuttons_center")));
+    final Offset center = tester.getCenter(find.byKey(const Key(JoyButtonsCenter.joyButtonsCenterKey)));
     await gesture.moveTo(center);
     await tester.pump();
     expect(pressed, equals([0, 1, 2, 3]));
@@ -87,7 +87,7 @@ void main() {
       ),
     ));
 
-    final Offset center = tester.getCenter(find.byKey(const Key("joybuttons_center")));
+    final Offset center = tester.getCenter(find.byKey(const Key(JoyButtonsCenter.joyButtonsCenterKey)));
     await tester.startGesture(center);
     await tester.pump();
     expect(pressed, equals([99]));

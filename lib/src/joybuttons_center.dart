@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class JoyButtonsCenter extends StatelessWidget {
+  static const joyButtonsCenterKey = "flutter_joybuttons_center";
+
   final MaterialColor widgetColor;
 
   final Size size;
@@ -14,7 +16,7 @@ class JoyButtonsCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: const Key("joybuttons_center"),
+      key: const Key(joyButtonsCenterKey),
       width: size.width,
       height: size.height,
       decoration: BoxDecoration(
