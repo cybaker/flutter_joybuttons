@@ -64,16 +64,12 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
     );
   }
 
-  List<Widget> getContainers(int number) {
-    List<Widget> all = [
-      testIndicator("A", 0, Colors.amber),
-      testIndicator("B", 1, Colors.blue),
-      testIndicator("C", 2, Colors.pink),
-      testIndicator("D", 3, Colors.green),
-      testIndicator("E", 4, Colors.red),
-      testIndicator("F", 5, Colors.lime),
-    ];
-    return all.take(number).toList();
+  List<Widget> getIndicators(int number) {
+    return List.generate(_numberOfButtons.round(), (index) {
+      var name = _names[index % _names.length];
+      var color = _colors[index % _colors.length];
+      return testIndicator(name, index, color);
+    });
   }
 
   Container testIndicator(String label, int index, Color color) {
@@ -110,11 +106,11 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ...getContainers(_numberOfButtons.round()),
-                ],
+              child: Wrap(
+                alignment: WrapAlignment.spaceAround,
+                children:  [
+                    ...getIndicators(_numberOfButtons.round()),
+                  ],
               ),
             ),
             const Text(
