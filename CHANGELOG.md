@@ -1,3 +1,7 @@
+## 1.0.3
+
+* Updated example and README.md.
+
 ## 1.0.2
 
 * Removed controller.
