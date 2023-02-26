@@ -21,32 +21,6 @@ class JoyButtonsExampleApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const JoyButtonsExample()),
-              );
-            },
-            child: const Text('JoyButtons'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class JoyButtonsExample extends StatefulWidget {
   const JoyButtonsExample({Key? key}) : super(key: key);
 
@@ -59,16 +33,24 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
   double dimension = 45;
 
   double _numberOfButtons = 3;
+  final double _maxButtons = 50;
+
+  final _names = List.generate(26, (index) => String.fromCharCode(index+65));
+  final _colors = [
+    Colors.amber,
+    Colors.blue,
+    Colors.pink,
+    Colors.green,
+    Colors.red,
+    Colors.lime,
+  ];
 
   List<Widget> getButtons() {
-    return [
-      testButton("A", Colors.amber),
-      testButton("B", Colors.blue),
-      testButton("C", Colors.pink),
-      testButton("D", Colors.green),
-      testButton("E", Colors.red),
-      testButton("F", Colors.lime),
-    ];
+    return List.generate(_numberOfButtons.round(), (index) {
+      var name = _names[index % _names.length];
+      var color = _colors[index % _colors.length];
+      return testButton(name, color);
+    });
   }
 
   JoyButtonsButton testButton(String label, MaterialColor color) {
@@ -116,9 +98,9 @@ class _JoyButtonsExampleState extends State<JoyButtonsExample> {
                 style: TextStyle(fontSize: 24)),
             Slider(
               min: 1.0,
-              max: 6.0,
+              max: _maxButtons,
               value: _numberOfButtons,
-              divisions: 5,
+              divisions: (_maxButtons - 1.0).round(),
               label: '${_numberOfButtons.round()}',
               onChanged: (value) {
                 setState(() {
